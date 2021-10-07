@@ -87,7 +87,7 @@
               <h4>Đăng ký</h4>
             </div>
             <div class="card-body">
-              <form role="form text-left" action="{{route('signup')}}" method="post">
+              <form role="form text-left" action="{{route('post.signup')}}" method="post">
                 @csrf
                 <div class="mb-3">
                   <input type="text" name="name" class="form-control" placeholder="Tên" aria-label="Name" aria-describedby="email-addon">

@@ -108,7 +108,7 @@
                         </p>
                       </div>
                     </div>
-                    <form role="form" action="{{route('signin')}}" method="post">
+                    <form role="form" action="{{route('post.signin')}}" method="post">
                       @csrf
                     <label>Email</label>
                     <div class="mb-3">

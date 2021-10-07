@@ -20,7 +20,7 @@ Route::group(['middleware' => 'user'], function () {
 });
 //Login
 Route::get('/',[FrontendController::class,'viewSignIn'])->name('signin');
-Route::post('/sign-in',[FrontendController::class,'postSignIn'])->name('signin');
+Route::post('/sign-in',[FrontendController::class,'postSignIn'])->name('post.signin');
 //Sign Up
 Route::get('/sign-up',[FrontendController::class,'viewSignUp'])->name('signup');
 Route::post('/sign-up',[FrontendController::class,'postSignup']);
