@@ -19,7 +19,7 @@ class UserMiddleware
     {
         if(Auth::check()){
             if(Auth::user()->role == 0){
-                return redirect(route('signin'));
+                return redirect(route('profile'));
             }
             return $next($request);
         }else{
