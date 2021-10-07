@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
@@ -14,11 +15,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::group(['middleware' => 'user'], function () {
+    Route::get('/admin',[AdminController::class,'viewindex'])->name('admin');
+});
 //Login
 Route::get('/',[FrontendController::class,'viewSignIn'])->name('signin');
-Route::post('/',[FrontendController::class,'postSignIn']);
-
+Route::post('/sign-in',[FrontendController::class,'postSignIn'])->name('signin');
 //Sign Up
 Route::get('/sign-up',[FrontendController::class,'viewSignUp'])->name('signup');
 Route::post('/sign-up',[FrontendController::class,'postSignup']);

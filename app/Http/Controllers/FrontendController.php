@@ -44,7 +44,7 @@ class FrontendController extends Controller
         $credentaials = array('email' => $request->email, 'password' => $request->password);
         if (Auth::attempt($credentaials, $remember)) {
             if (Auth::user()->banned_status == 0) {
-                return redirect()->route('signin')->with('message', '2');
+                return redirect()->route('admin')->with('message', '1');
             } else {
                 Auth::logout();
                 return redirect()->back()->with('message', '4');
@@ -65,7 +65,9 @@ class FrontendController extends Controller
         if ($sign_up == true) {
             $credentaials = array('email' => $request->email, 'password' => $request->password);
             if (Auth::attempt($credentaials)) {
-                return redirect()->route('signin')->with('message', '1');
+                if(Auth::user()->role == 1){
+                    return redirect()->route('admin')->with('message', '1');
+                }            
             } else {
                 return redirect()->back();
             }
