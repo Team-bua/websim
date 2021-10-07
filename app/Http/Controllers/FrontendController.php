@@ -67,6 +67,8 @@ class FrontendController extends Controller
             if (Auth::attempt($credentaials)) {
                 if(Auth::user()->role == 1){
                     return redirect()->route('admin')->with('message', '1');
+                }else{
+                    return redirect()->route('signin')->with('message', '1');
                 }            
             } else {
                 return redirect()->back();
