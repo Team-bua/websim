@@ -2,9 +2,10 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserBillsTable extends Migration
+class CreateAdminTransactionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +14,12 @@ class CreateUserBillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_bills', function (Blueprint $table) {
+        Schema::create('admin_transaction', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->string('order_id')->nullable();
-            $table->integer('amount');
-            $table->string('description')->nullable();
-            $table->integer('status')->default(0);
+            $table->string('bank_image')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('bank_number')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateUserBillsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_bills');
+        Schema::dropIfExists('admin_transaction');
     }
 }

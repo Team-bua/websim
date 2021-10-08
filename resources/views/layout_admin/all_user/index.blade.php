@@ -31,7 +31,7 @@
                                 <table class="table table-flush" id="datatable-basic">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Tên & email</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Ảnh & Tên & email</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Mật khẩu</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Số điện thoại</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Số dư</th>
@@ -45,13 +45,13 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
-                                                    {{-- <div>
+                                                    <div>
                                                         @if($user->avatar_original)
                                                         <img src="{{ $user->avatar_original }}" class="avatar avatar-sm me-3" alt="user1">
                                                         @else
                                                         <img src="{{ asset($user->avatar ? $user->avatar : 'dashboard/assets/img/no_img.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
                                                         @endif
-                                                    </div> --}}
+                                                    </div>
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm">{{ $user->name }}</h6>
                                                         <p class="text-xs text-secondary mb-0">{{ $user->email }}</p>

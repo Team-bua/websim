@@ -64,7 +64,7 @@
                                 <input type="text" class="form-control" id="token" name="token" value="{{ $user->user_token }}"  disabled>
                                 </div>
                             </div>
-                            {{-- <div class="form-group">
+                            <div class="form-group">
                                 <label class="form-control-label" for="basic-url">Ảnh đại diện</label> <br>
                                 <div class="avatar avatar-xl position-relative" style="margin-top: 25px; margin-left: 25px">
                                 @if(Auth::user()->avatar_original)
@@ -77,7 +77,7 @@
                             </div>
                             @error('avatar')
                                 <p style="color:red; font-size: 13px; margin-left: 5px">{{ $message }}</p>
-                            @enderror --}}
+                            @enderror
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn bg-gradient-primary w-12">Cập nhật </button>

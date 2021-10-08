@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserTableSeeder::class);
+        $this->call(AdminTransactionTableSeeder::class);
     }
 }
 
@@ -32,6 +33,18 @@ class UserTableSeeder extends Seeder
                 'password' => Hash::make('admin@123'),
                 'recovery_password' => 'admin@123',
                 'user_token' => Str::random(20)
+            ],
+        ]);
+    }
+}
+
+class AdminTransactionTableSeeder extends Seeder
+{
+    public function run()
+    {
+        DB::table('admin_transaction')->insert([
+            [
+                'user_id' => 1,
             ],
         ]);
     }

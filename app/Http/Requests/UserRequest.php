@@ -24,7 +24,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'avatar' => 'mimes:jpg,jpeg,png,gif|max:2048',
+            'avatar' => 'mimes:jpg,jpeg,png,gif|max:2048',
             'name' => 'required|max:50|regex:/(^[\pL0-9 ]+$)/u',
             'phone' => 'required|numeric',
         ];
@@ -32,8 +32,8 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
-            // 'avatar.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif are accepted',
-            // 'avatar.max' => 'Giới hạn ảnh 2Mb',
+            'avatar.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif are accepted',
+            'avatar.max' => 'Giới hạn ảnh 2Mb',
             'name.regex' => 'Tên không được có ký tự đặc biệt',
             'name.max' => 'Giới hạn 50 ký tự',
             'phone.required' => 'Vui lòng nhập số điện thoại',

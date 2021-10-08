@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\AutoBank;
 use App\Repositories\FrontendRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,5 +81,14 @@ class FrontendController extends Controller
     {
         Auth::logout();
         return redirect()->route('signin');
+    }
+
+    public function transtionInfo(Request $request)
+    {
+        $res_json = $request->data[0];
+        $data = new AutoBank();
+        $data->data = json_encode($res_json);
+        $data->save();
+        $this->repository->autoBank($data->data, $data->id);
     }
 }
