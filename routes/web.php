@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'user'], function () {
     Route::get('/admin',[AdminController::class,'viewindex'])->name('admin');
+    //View user
+    Route::get('/all-users',[AdminController::class,'getAllUsers'])->name('allusers');
+    Route::get('/users/banned/{id}',[AdminController::class,'banned'])->name('users.banned');
+    Route::get('/users/unbanned/{id}',[AdminController::class,'unbanned'])->name('users.unbanned');
+    Route::post('/users/update/{id}',[AdminController::class,'updateMoney'])->name('users.update.money');
 
 });
 
