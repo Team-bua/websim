@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Services;
-use App\Repositories\OrderRepository;
+use App\Repositories\ServicesRepository;
 use App\Http\Requests\order\OrderRequest;
 
-class OrderController extends Controller
+class ServicesController extends Controller
 {
     /**
      * The ProductRepository instance.
@@ -24,15 +24,15 @@ class OrderController extends Controller
      * @param  \App\Repositories\UserRepository $repository
      *
      */
-    public function __construct(OrderRepository $repository)
+    public function __construct(ServicesRepository $repository)
     {
         $this->repository = $repository;
     }
 
     public function index()
     {
-        $orders = Services::all();
-        return view('layout_admin.orders.index', compact('orders'));
+        $services = Services::all();
+        return view('layout_admin.services.index', compact('services'));
     }
 
     public function store(Request $request)
@@ -41,5 +41,15 @@ class OrderController extends Controller
         return redirect()->back()->with('information', 'Thêm dịch vụ thành công');
         // $orders = Services::all();
         // return view('layout_admin.orders.index', compact(['orders' => $orders]));
+    }
+
+    public function edit(Request $request)
+    {
+        return $this->repository->getServiceForView($request);
+    }
+
+    public function update(Request $request)
+    {
+        return $this->repository->update($request);
     }
 }

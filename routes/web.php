@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -29,8 +29,10 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('/users/unbanned/{id}',[AdminController::class,'unbanned'])->name('users.unbanned');
     Route::post('/users/update/{id}',[AdminController::class,'updateMoney'])->name('users.update.money');
     //order
-    Route::get('/list-order',[OrderController::class,'index'])->name('order');
-    Route::post('/list-order/store',[OrderController::class,'store'])->name('order.store');
+    Route::get('/list-service',[ServicesController::class,'index'])->name('service');
+    Route::get('/list-service/edit',[ServicesController::class,'edit'])->name('service.edit');
+    Route::post('/list-service/store',[ServicesController::class,'store'])->name('service.store');
+    Route::post('/list-service/update',[ServicesController::class,'update'])->name('service.update');
 
 });
 

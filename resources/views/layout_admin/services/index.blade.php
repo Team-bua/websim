@@ -21,10 +21,10 @@
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
-                    @if (session('information'))
-                    <div class="alert alert-success"><b>{{ session('information') }}</b></div>
-                    @endif
                     <div class="card-header pb-0">
+                        @if (session('information'))
+                        <div class="alert alert-success"><b>{{ session('information') }}</b></div>
+                        @endif
                         <a href="" data-bs-toggle="modal" data-bs-target="#exampleModalMessage">
                             <button class="btn bg-gradient-primary mt-4 w-12" style="float: right;;margin-bottom:5px;margin-left:5px;">
                                 <i class="fa fa-plus">&nbsp; Get Proxy </i></button>
@@ -52,28 +52,37 @@
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Tên</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Giá</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Ngày thêm</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Thao tác</th>
                                     </tr>
 
                                 </thead>
                                 <tbody>
                                     @php $i = 1 @endphp
-                                    @if($orders)
-                                    @foreach($orders as $order)
+                                    @if($services)
+                                    @foreach($services as $service)
                                     <tr>
                                         <td class="align-middle text-center text-sm">
                                             {{$i++}}
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                           <img src="{{ isset($order->avatar) ? asset($order->avatar) : '' }}" alt="" width="150px" height="80" >
+                                            <img src="{{ isset($service->avatar) ? asset($service->avatar) : '' }}" alt="" width="150px" height="80">
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            {{ $order->name }}
+                                            {{ $service->name }}
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            {{ number_format($order->price)}} VNĐ &nbsp;
+                                            {{ number_format($service->price)}} VNĐ &nbsp;
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            {{ date('d/m/Y', strtotime(str_replace('/', '-', $order->created_at))) }}
+                                            {{ date('d/m/Y', strtotime(str_replace('/', '-', $service->created_at))) }}
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <a href="" onclick="editService('{{ $service->id }}');return false;" class="text-secondary font-weight-bold text-xs">
+                                                <span class="badge bg-gradient-info">Sửa</span>
+                                            </a> ||
+                                            <a href="javascript:;" delete_id="#" class="text-secondary font-weight-bold text-xs simpleConfirm">
+                                                <span class="badge bg-gradient-danger">Xóa</span>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -102,31 +111,72 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form action="#" method="post" enctype="multipart/form-data" id="import-data">
+                    <form action="{{ route('service.store') }}" method="post" enctype="multipart/form-data" id="import-data">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Tên</label>
-                                <input type="text" class="form-control" id="service_name" name="service_name">
+                                <input type="text" class="form-control" id="service_name" name="service_name" required max="190">
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Giá</label>
-                                <input type="text" class="form-control" id="service_price" name="service_price">
+                                <input type="number" class="form-control" id="service_price" name="service_price" min="0" required>
                             </div>
                             <p id="error-data-text" style="color:red;font-size: 13px;margin-left: 10px"></p>
                             <div class="form-group">
                                 <label class="form-control-label" for="basic-url">Logo</label> <br>
                                 <div class="input-group">
-                                    <input id="fImages" type="file" name="service_avatar" class="form-control" style="display: none" onchange="changeImg(this)">
+                                    <input id="fImages" type="file" name="service_avatar" class="form-control service_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg(this)">
                                     <img id="img" class="img" style="width: 200px; height: 120px;" src="{{ asset(isset($partner->image) ? $partner->image : 'dashboard/assets/img/no_img.jpg') }}">
                                 </div>
                             </div>
                         </div>
-                        </form>
                         <div class="modal-footer">
                             <button type="submit" class="btn bg-gradient-success submit">Thêm</button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-md-4">
+        <!-- Modal -->
+        <div class="modal fade" id="editServiceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalMessageTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Sửa dịch vụ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form action="{{ route('service.update') }}" method="post" enctype="multipart/form-data" id="update-service">
+                        @csrf
+                        <input type="hidden" class="form-control" id="service_update_id" name="service_update_id">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Tên</label>
+                                <input type="text" class="form-control" id="service_update_name" name="service_update_name" required max="190">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Giá</label>
+                                <input type="number" class="form-control" id="service_update_price" name="service_update_price" min="0" required>
+                            </div>
+                            <p id="error-data-text" style="color:red;font-size: 13px;margin-left: 10px"></p>
+                            <div class="form-group">
+                                <label class="form-control-label" for="basic-url">Logo</label> <br>
+                                <div class="input-group">
+                                    <input id="fImages_2" type="file" name="service_update_avatar" class="form-control service_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg(this)">
+                                    <img id="img_2" class="img img_avatar" style="width: 200px; height: 120px;" src="">
+                                </div>
+                            </div>
+                        </div>
+
+                        </form>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn bg-gradient-success submit btn-update-service">Sửa</button>
+                        </div>
                 </div>
             </div>
         </div>
@@ -135,6 +185,7 @@
 @endsection
 @section('script')
 <script src="{{ asset('dashboard/assets/js/plugins/datatables.js') }}" type="text/javascript"></script>
+
 <script type="text/javascript">
     const dataTableBasic = new simpleDatatables.DataTable("#datatable-basic", {
         searchable: false,
@@ -142,6 +193,25 @@
     });
 </script>
 <script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+        }
+    });
+    function changeImg(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          $('#img_2').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    $('#img_2').click(function() {
+      $('#fImages_2').click();
+    });
     if (document.querySelector('.datepicker')) {
         flatpickr('.datepicker', {
             mode: "range",
@@ -149,7 +219,40 @@
         });
     }
 
-    $document.on('click', '')
+    function editService(id) {
 
+        $.ajax({
+            method: 'get',
+            url: "{{ route('service.edit') }}",
+            data: {
+                id: id
+            },
+            success: function(data) {
+                    $('#service_update_id').attr('value', data.data.id);
+                    $('#service_update_name').attr('value', data.data.name);
+                    $('#service_update_price').attr('value', data.data.price);
+                    $('.img_avatar').attr('src', data.data.avatar);
+                    $('#editServiceModal').modal('show');
+                // if (data.success == true) {
+                //     that.parent().parent().remove();
+                //     Swal.fire(
+                //         'Xóa!',
+                //         'Xóa thành công.',
+                //         'success'
+                //     )
+                // } else {
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Thẻ vẫn còn tồn tại!',
+                //     })
+                // }
+
+            }
+        })
+    }
+
+    $(document).on('click', '.btn-update-service', function(){
+        $('#update-service').submit();
+    })
 </script>
 @endsection
