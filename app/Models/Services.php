@@ -11,6 +11,8 @@ class Services extends Model
 
     protected $table = 'services';
 
+    protected $fillable = ['name', 'avatar', 'price'];
+
     public function service()
     {
         return $this->belongsTo(ServiceBill::class,'service_id', 'id');

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\User\UserController;
@@ -24,6 +25,10 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('/users/banned/{id}',[AdminController::class,'banned'])->name('users.banned');
     Route::get('/users/unbanned/{id}',[AdminController::class,'unbanned'])->name('users.unbanned');
     Route::post('/users/update/{id}',[AdminController::class,'updateMoney'])->name('users.update.money');
+
+    //order
+    Route::get('/list-order',[OrderController::class,'index'])->name('order');
+    Route::post('/list-order/store',[OrderController::class,'store'])->name('order.store');
 
 });
 
