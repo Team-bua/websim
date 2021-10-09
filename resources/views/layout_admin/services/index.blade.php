@@ -27,25 +27,13 @@
                         @endif
                         <a href="" data-bs-toggle="modal" data-bs-target="#exampleModalMessage">
                             <button class="btn bg-gradient-primary mt-4 w-12" style="float: right;;margin-bottom:5px;margin-left:5px;">
-                                <i class="fa fa-plus">&nbsp; Get Proxy </i></button>
+                                <i class="fa fa-plus">&nbsp; Thêm dịch vụ </i></button>
                         </a>
                     </div><br>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
                             <table class="table table-flush" id="datatable-basic">
                                 <thead class="thead-light">
-                                    <!-- <tr>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">STT</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Order ID</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">User</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Service</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Phone Number</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Code</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Price</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Status</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Created at</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Thao tác</th>
-                                    </tr> -->
                                     <tr>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">STT</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Logo</th>
