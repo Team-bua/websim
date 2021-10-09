@@ -111,30 +111,31 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form action="{{ route('service.store') }}" method="post" enctype="multipart/form-data" id="import-data">
+                    <form method="post" enctype="multipart/form-data" id="import-data">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Tên</label>
-                                <input type="text" class="form-control" id="service_name" name="service_name" required max="190">
+                                <input type="text" class="form-control" id="service_name" name="service_name" required maxlength="190" placeholder="Tên dịch vụ...">
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Giá</label>
-                                <input type="number" class="form-control" id="service_price" name="service_price" min="0" required>
+                                <input type="number" class="form-control" id="service_price" name="service_price" required min="0" maxlength="190" placeholder="Giá...">
                             </div>
                             <p id="error-data-text" style="color:red;font-size: 13px;margin-left: 10px"></p>
                             <div class="form-group">
                                 <label class="form-control-label" for="basic-url">Logo</label> <br>
                                 <div class="input-group">
-                                    <input id="fImages" type="file" name="service_avatar" class="form-control service_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg(this)">
+                                    <input id="fImages" type="file" name="service_avatar" class="form-control service_add_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg(this)">
                                     <img id="img" class="img" style="width: 200px; height: 120px;" src="{{ asset(isset($partner->image) ? $partner->image : 'dashboard/assets/img/no_img.jpg') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn bg-gradient-success submit">Thêm</button>
+                            <button type="submit" class="btn bg-gradient-success submit btn-add">Thêm</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -157,26 +158,26 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Tên</label>
-                                <input type="text" class="form-control" id="service_update_name" name="service_update_name" required max="190">
+                                <input type="text" class="form-control" id="service_update_name" name="service_update_name" required maxlength="190">
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Giá</label>
-                                <input type="number" class="form-control" id="service_update_price" name="service_update_price" min="0" required>
+                                <input type="number" class="form-control" id="service_update_price" name="service_update_price" min="0" maxlength="190" required>
                             </div>
                             <p id="error-data-text" style="color:red;font-size: 13px;margin-left: 10px"></p>
                             <div class="form-group">
                                 <label class="form-control-label" for="basic-url">Logo</label> <br>
                                 <div class="input-group">
-                                    <input id="fImages_2" type="file" name="service_update_avatar" class="form-control service_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg(this)">
+                                    <input id="fImages_2" type="file" name="service_update_avatar" class="form-control service_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg2(this)">
                                     <img id="img_2" class="img img_avatar" style="width: 200px; height: 120px;" src="">
                                 </div>
                             </div>
                         </div>
-
-                        </form>
                         <div class="modal-footer">
                             <button type="submit" class="btn bg-gradient-success submit btn-update-service">Sửa</button>
                         </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -193,24 +194,41 @@
     });
 </script>
 <script type="text/javascript">
-    $.ajaxSetup({
-        headers: {
+    $('.import-data').on('click', function(e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('service.store')}}",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                console.log(data);
+            }
+        })
+    })
 
+    function changeImg2(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#img_2').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
         }
-    });
-    function changeImg(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          $('#img_2').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
     }
+
+
     $('#img_2').click(function() {
-      $('#fImages_2').click();
+        $('#fImages_2').click();
     });
     if (document.querySelector('.datepicker')) {
         flatpickr('.datepicker', {
@@ -218,6 +236,7 @@
             dateFormat: 'd/m/Y'
         });
     }
+
 
     function editService(id) {
 
@@ -228,11 +247,11 @@
                 id: id
             },
             success: function(data) {
-                    $('#service_update_id').attr('value', data.data.id);
-                    $('#service_update_name').attr('value', data.data.name);
-                    $('#service_update_price').attr('value', data.data.price);
-                    $('.img_avatar').attr('src', data.data.avatar);
-                    $('#editServiceModal').modal('show');
+                $('#service_update_id').attr('value', data.data.id);
+                $('#service_update_name').attr('value', data.data.name);
+                $('#service_update_price').attr('value', data.data.price);
+                $('.img_avatar').attr('src', data.data.avatar);
+                $('#editServiceModal').modal('show');
                 // if (data.success == true) {
                 //     that.parent().parent().remove();
                 //     Swal.fire(
@@ -247,12 +266,35 @@
                 //     })
                 // }
 
+            },
+            error: function(data) {
+                console.log(data);
             }
         })
     }
 
-    $(document).on('click', '.btn-update-service', function(){
-        $('#update-service').submit();
+
+
+    $(document).on('click', '.update-service', function(e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('service.update')}}",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                console.log(data);
+            }
+        })
     })
 </script>
 @endsection

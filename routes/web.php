@@ -33,7 +33,7 @@ Route::group(['middleware' => 'user'], function () {
     //order
     Route::get('/list-service',[ServicesController::class,'index'])->name('service');
     Route::get('/list-service/edit',[ServicesController::class,'edit'])->name('service.edit');
-    Route::post('/list-service/store',[ServicesController::class,'store'])->name('service.store');
+    Route::post('/list-service',[ServicesController::class,'store'])->name('service.store');
     Route::post('/list-service/update',[ServicesController::class,'update'])->name('service.update');
     //recharge bill
     Route::get('/recharge-bills',[BillController::class,'rechargeBill'])->name('rechargebill');
