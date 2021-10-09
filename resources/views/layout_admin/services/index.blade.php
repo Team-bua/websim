@@ -68,7 +68,7 @@
                                             <a href="" onclick="editService('{{ $service->id }}');return false;" class="text-secondary font-weight-bold text-xs">
                                                 <span class="badge bg-gradient-info">Sửa</span>
                                             </a> ||
-                                            <a href="javascript:;" delete_id="#" class="text-secondary font-weight-bold text-xs simpleConfirm">
+                                            <a href="javascript:;" delete_id="{{  $service->id }}" class="text-secondary font-weight-bold text-xs simpleConfirmDelete">
                                                 <span class="badge bg-gradient-danger">Xóa</span>
                                             </a>
                                         </td>
@@ -105,10 +105,12 @@
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Tên</label>
                                 <input type="text" class="form-control" id="service_name" name="service_name" required maxlength="190" placeholder="Tên dịch vụ...">
+                                <p class="errors_add_service_name" style="color:red; font-size: 14px;"></p>
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Giá</label>
                                 <input type="number" class="form-control" id="service_price" name="service_price" required min="0" maxlength="190" placeholder="Giá...">
+                                <p class="errors_add_service_price" style="color:red; font-size: 14px;"></p>
                             </div>
                             <p id="error-data-text" style="color:red;font-size: 13px;margin-left: 10px"></p>
                             <div class="form-group">
@@ -117,12 +119,14 @@
                                     <input id="fImages" type="file" name="service_avatar" class="form-control service_add_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg(this)">
                                     <img id="img" class="img" style="width: 200px; height: 120px;" src="{{ asset(isset($partner->image) ? $partner->image : 'dashboard/assets/img/no_img.jpg') }}">
                                 </div>
+                                <p class="errors_add_service_avatar" style="color:red; font-size: 14px;"></p>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn bg-gradient-success submit btn-add">Thêm</button>
-                        </div>
                     </form>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn bg-gradient-success submit btn-add">Thêm</button>
+                    </div>
+
 
                 </div>
             </div>
@@ -146,11 +150,14 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Tên</label>
-                                <input type="text" class="form-control" id="service_update_name" name="service_update_name" required maxlength="190">
+                                <input type="text" class="form-control" id="service_update_name" name="service_update_name">
+                                <p class="errors_update_service_update_name" style="color:red; font-size: 14px;"></p>
+
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Giá</label>
                                 <input type="number" class="form-control" id="service_update_price" name="service_update_price" min="0" maxlength="190" required>
+                                <p class="errors_update_service_update_price" style="color:red; font-size: 14px;"></p>
                             </div>
                             <p id="error-data-text" style="color:red;font-size: 13px;margin-left: 10px"></p>
                             <div class="form-group">
@@ -159,12 +166,13 @@
                                     <input id="fImages_2" type="file" name="service_update_avatar" class="form-control service_avatar" style="display: none" accept="image/gif, image/jpeg, image/png" onchange="changeImg2(this)">
                                     <img id="img_2" class="img img_avatar" style="width: 200px; height: 120px;" src="">
                                 </div>
+                                <p class="errors_update_service_update_avatar" style="color:red; font-size: 14px;"></p>
                             </div>
                         </div>
+                        </form>
                         <div class="modal-footer">
                             <button type="submit" class="btn bg-gradient-success submit btn-update-service">Sửa</button>
                         </div>
-                    </form>
 
                 </div>
             </div>
@@ -182,7 +190,7 @@
     });
 </script>
 <script type="text/javascript">
-    $('.import-data').on('click', function(e) {
+    $('.btn-add').on('click', function(e) {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -190,17 +198,51 @@
         });
 
         e.preventDefault();
-        var formData = new FormData(this);
+        // var formData = new FormData(this);
+        var form = new FormData();
+        var img = $('.service_add_avatar')[0].files;
+        var name = $('#service_name').val();
+        var price = $('#service_price').val();
+        // var formData = $('#import-data').serializeArray().reduce(function(obj, item) {
+        //     obj[item.name] = item.value;
+        //     return obj;
+        // }, {});
+        jQuery.each(img, function(i, file) {
+            form.append('service_avatar', file);
+        });
+        form.append('service_name', name);
+        form.append('service_price', price);
         $.ajax({
             type: 'POST',
             url: "{{ route('service.store')}}",
-            data: formData,
+            data: form,
             cache: false,
             contentType: false,
             processData: false,
             success: function(data) {
-                console.log(data);
-            }
+                if (data.success == true) {
+                    Swal.fire(
+                        'Thêm!',
+                        'Thêm thành công.',
+                        'success'
+                    )
+                    window.location.reload();
+                }
+                else {
+                    Swal.fire(
+                        'Thêm!',
+                        'Thêm thất bại.',
+                        'error'
+                    )
+                    window.location.reload();
+                }
+            },
+            error: function(data) {
+                var errors_array = JSON.parse(data.responseText).errors;
+                $.each(errors_array, function(key, value) {
+                    $('.errors_add_' + key).html(value[0]);
+                });
+            },
         })
     })
 
@@ -261,9 +303,44 @@
         })
     }
 
+//delete
+    $(document).on('click', '.simpleConfirmDelete', function(e) {
+        e.preventDefault();
+        var id = $(this).attr('delete_id');
+        console.log(id);
+        swal.fire({
+            title: "Bạn có muốn xóa mã này?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xóa ngay!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    method: 'get',
+                    url: "{{ route('service.list.destroy') }}",
+                    data: {
+                        id: id
+                    },
+                    success: function(data) {
+                        if (data.success == true) {
+                            Swal.fire(
+                                'Xóa!',
+                                'Xóa thành công.',
+                                'success'
+                            )
+                            window.location.reload();
+                        }
+                    }
+                })
+            }
+        });
+    });
 
-
-    $(document).on('click', '.update-service', function(e) {
+//update
+    $(document).on('click', '.btn-update-service', function(e) {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -271,17 +348,50 @@
         });
 
         e.preventDefault();
-        var formData = new FormData(this);
+        var form = new FormData();
+        var img = $('.service_avatar')[0].files;
+        var id = $('#service_update_id').val();
+        var name = $('#service_update_name').val();
+        var price = $('#service_update_price').val();
+
+        jQuery.each(img, function(i, file) {
+            form.append('service_update_avatar', file);
+        });
+
+        form.append('service_update_name', name);
+        form.append('service_update_price', price);
+        form.append('service_update_id', id);
         $.ajax({
             type: 'POST',
             url: "{{ route('service.update')}}",
-            data: formData,
+            data: form,
             cache: false,
             contentType: false,
             processData: false,
             success: function(data) {
-                console.log(data);
-            }
+                if (data.success == true) {
+                    Swal.fire(
+                        'Sửa!',
+                        'Sửa thành công.',
+                        'success'
+                    )
+                    window.location.reload();
+                }
+                else {
+                    Swal.fire(
+                        'Sửa!',
+                        'Sửa thất bại.',
+                        'error'
+                    )
+                    window.location.reload();
+                }
+            },
+            error: function(data) {
+                var errors_array = JSON.parse(data.responseText).errors;
+                $.each(errors_array, function(key, value) {
+                    $('.errors_update_' + key).html(value[0]);
+                });
+            },
         })
     })
 </script>

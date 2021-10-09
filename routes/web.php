@@ -35,6 +35,7 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('/list-service/edit',[ServicesController::class,'edit'])->name('service.edit');
     Route::post('/list-service',[ServicesController::class,'store'])->name('service.store');
     Route::post('/list-service/update',[ServicesController::class,'update'])->name('service.update');
+    Route::get('/list-service/destroy',[ServicesController::class,'destroy'])->name('service.list.destroy');
     //recharge bill
     Route::get('/recharge-bills',[BillController::class,'rechargeBill'])->name('rechargebill');
     Route::get('/recharge-bill-delete',[BillController::class,'deleteRechargeBill'])->name('rechargebill.destroy');

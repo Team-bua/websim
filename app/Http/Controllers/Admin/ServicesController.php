@@ -37,8 +37,24 @@ class ServicesController extends Controller
 
     public function store(Request $request)
     {
-        $this->repository->store($request);
-        return redirect()->back()->with('information', 'Thêm dịch vụ thành công');
+        request()->validate(
+            [
+                'service_avatar' => 'required|mimes:jpg,jpeg,png,gif|max:2048',
+                'service_name' => 'required|max:190',
+                'service_price' => 'required|numeric|min:0'
+            ],
+            [
+                'service_avatar.required' => 'Vui lòng chọn logo',
+                'service_avatar.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif',
+                'service_avatar.max' => 'Giới hạn ảnh 2Mb',
+                'service_name.required' => 'Vui lòng điền tên dịch vụ',
+                'service_name.max' => 'Tên dịch vụ không vượt quá 190 ký tự',
+                'service_price.required' => 'Vui lòng điền giá',
+                'service_price.numeric' => 'Giá phải là định dạng số',
+                'service_price.min' => 'Giá phải lớn hơn hoặc bằng 0',
+            ]
+        );
+        return  $this->repository->store($request);
     }
 
     public function edit(Request $request)
@@ -48,6 +64,34 @@ class ServicesController extends Controller
 
     public function update(Request $request)
     {
+        request()->validate(
+            [
+                'service_update_avatar' => 'mimes:jpg,jpeg,png,gif|max:2048',
+                'service_update_name' => 'required|max:190',
+                'service_update_price' => 'required|numeric|min:0'
+            ],
+            [
+                'service_update_avatar.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif',
+                'service_update_avatar.max' => 'Giới hạn ảnh 2Mb',
+                'service_update_name.required' => 'Vui lòng điền tên dịch vụ',
+                'service_update_name.max' => 'Tên dịch vụ không vượt quá 190 ký tự',
+                'service_update_price.required' => 'Vui lòng điền giá',
+                'service_update_price.numeric' => 'Giá phải là định dạng số',
+                'service_update_price.min' => 'Giá phải lớn hơn hoặc bằng 0',
+            ]
+        );
         return $this->repository->update($request);
+    }
+
+    public function destroy(Request $request)
+    {
+        $service = Services::find($request->id);
+        if(file_exists($service->avatar)){
+            unlink(public_path($service->avatar));
+        }
+        $service->delete();
+            return response()->json([
+              'success' => true
+          ]);
     }
 }
