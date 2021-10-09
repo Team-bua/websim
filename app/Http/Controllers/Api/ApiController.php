@@ -10,11 +10,13 @@ class ApiController extends Controller
 {
     public function getOrder()
     {
+        $i = 1;
         $order = ServiceBill::count();
         if($order > 0){
+            $i++;
             return response()->json([
                 'success' => true,
-                'message' => 'Have an order'
+                'message' => 'There are '.$i. 'order'
             ]);
         }else{
             return response()->json([
