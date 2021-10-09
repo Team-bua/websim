@@ -106,7 +106,7 @@
             </div>
         </div>
     </div>
-    {{-- <div class="container-fluid py-4">
+    <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
@@ -169,7 +169,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 </main>
 @endsection
 @section('script')

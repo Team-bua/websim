@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'user'], function () {
     Route::get('/admin',[AdminController::class,'viewindex'])->name('admin');
+    Route::post('/admin',[AdminController::class,'viewindex'])->name('admin.search');
     //Bank
     Route::get('/bank-info',[AdminController::class,'getBankInfo'])->name('bankinfo');
     Route::post('/update-bank-info/{id}',[AdminController::class,'updateBankInfo'])->name('update.bankinfo');
