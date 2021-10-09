@@ -52,6 +52,8 @@ Route::group(['middleware' => 'login'], function () {
     //recharge
     Route::get('/recharge',[UserController::class,'recharge'])->name('recharge');
     Route::get('/recharge-history',[UserController::class,'getRechargeHistory'])->name('rechargehistory');
+    //Document
+    Route::get('/document',[AdminController::class,'documentAPI'])->name('document');
 });
 
 //Login

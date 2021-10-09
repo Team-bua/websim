@@ -17,6 +17,11 @@ class AdminController extends Controller
         return view('layout_admin.index');
     }
 
+    public function documentAPI()
+    {
+        return view('layout_admin.document');
+    }
+
     public function getBankInfo(Request $request)
     {
         $bank = AdminTransaction::find(1);
