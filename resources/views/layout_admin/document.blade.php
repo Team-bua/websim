@@ -17,23 +17,22 @@
         </div>
     </nav>
     <!-- End Navbar -->
+    @can('admin')
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
                 <div class="card h-100">
                     <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">Import Data</h6>
+                        <h6 class="mb-0">Get Order</h6>
                     </div>
                         <div class="card-body p-3">
-                            <p>URL : POST=>https://data.bdads.io/api/import?user_token={token}&data={data}</p>
-                            <p>Token : Vào trang cá nhân để lấy và nhập vào</p>
-                            <p>Data : Là dữ liệu người dùng nhập vào</p>
-                            <p>Ví dụ : https://data.bdads.io/api/import?user_token=abcxyz&data=string</p>
+                            <p>URL : GET=>https://data.bdads.io/api/order</p>
                         </div>
                 </div>
             </div>
         </div>
     </div>
+    @endcan
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
