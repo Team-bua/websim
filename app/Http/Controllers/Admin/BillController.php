@@ -1,50 +1,34 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChangePassRequest;
-use App\Http\Requests\RechargeRequest;
-use App\Http\Requests\UserRequest;
-use App\Models\AdminTransaction;
-use App\Repositories\UserRepository;
+use App\Repositories\BillRepository;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class BillController extends Controller
 {
+    /**
+     * The ProductRepository instance.
+     *
+     * @var \App\Repositories\front\BillRepository
+     * 
+     */
     protected $repository;
 
-    public function __construct(UserRepository $repository)
+    /**
+     * Create a new PostController instance.
+     *
+     * @param  \App\Repositories\BillRepository $repository
+     *
+     */
+    public function __construct(BillRepository $repository)
     {
         $this->repository = $repository;
     }
-    public function getProfile($id)
-    {
-        $user = $this->repository->getProfile($id);
-        return view('user.profile', compact('user'));
-    }
 
-    public function updateInfo(UserRequest $request, $id)
-    {
-        $this->repository->updateInfo($request, $id);
-        return redirect()->back()->with('information', 'Cập nhật thông tin thành công');
-    }
-
-    public function changePass(ChangePassRequest $request, $id)
-    {
-        $this->repository->changePass($request, $id);
-        return redirect()->back()->with('changepass', 'Cập nhật mật khẩu thành công');
-    }
-
-    public function recharge()
-    {   
-        $admin = AdminTransaction::find(1);
-        $admin_str = $this->repository->utf8convert($admin->bank_name);
-        return view('user.recharge', compact('admin','admin_str'));
-    }
-
-    public function getServiceHistory(Request $request)
-    {
+    public function serviceBill(Request $request)
+    {          
         $date =  date('Y-m-d');
         if($request->date == null)
         {
@@ -62,13 +46,12 @@ class UserController extends Controller
             $last_day = date('Y-m-d', strtotime(str_replace('/', '-', explode(' to ', $request->date)[1])));
         }
         
-        $bills = $this->repository->getServiceBill($request);
-        return view('user.servicehistory', compact('bills', 'first_day', 'last_day'));
+        $service_bills = $this->repository->serviceBill($request);
+        return view('layout_admin.bills.servicebill', compact('service_bills','first_day','last_day'));
     }
-
-
-    public function getRechargeHistory(Request $request)
-    {
+    
+    public function rechargeBill(Request $request)
+    {          
         $date =  date('Y-m-d');
         if($request->date == null)
         {
@@ -87,6 +70,16 @@ class UserController extends Controller
         }
         
         $recharge_bills = $this->repository->getRechargeBill($request);
-        return view('user.rechargehistory', compact('recharge_bills', 'first_day', 'last_day'));
+        return view('layout_admin.bills.rechargebill', compact('recharge_bills','first_day','last_day'));
+    }
+
+    public function deleteServiceBill(Request $request)
+    {
+        return $this->repository->deleteServiceBill($request);
+    }
+
+    public function deleteRechargeBill(Request $request)
+    {
+        return $this->repository->deleteRechargeBill($request);
     }
 }

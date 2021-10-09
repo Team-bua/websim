@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BillController;
 use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\LoginController;
@@ -33,6 +34,12 @@ Route::group(['middleware' => 'user'], function () {
     Route::get('/list-service/edit',[ServicesController::class,'edit'])->name('service.edit');
     Route::post('/list-service/store',[ServicesController::class,'store'])->name('service.store');
     Route::post('/list-service/update',[ServicesController::class,'update'])->name('service.update');
+    //recharge bill
+    Route::get('/recharge-bills',[BillController::class,'rechargeBill'])->name('rechargebill');
+    Route::get('/recharge-bill-delete',[BillController::class,'deleteRechargeBill'])->name('rechargebill.destroy');
+    //service bill
+    Route::get('/service-bills',[BillController::class,'serviceBill'])->name('servicebill');
+    Route::get('/service-bill-delete',[BillController::class,'deleteServiceBill'])->name('service.destroy');
 
 });
 
@@ -40,6 +47,8 @@ Route::group(['middleware' => 'login'], function () {
     Route::get('/profile/{id}',[UserController::class,'getProfile'])->name('profile');
     Route::post('/update-info/{id}',[UserController::class,'updateInfo'])->name('update.info');
     Route::post('/update-pass/{id}',[UserController::class,'changePass'])->name('update.pass');
+    //Service history
+    Route::get('/services-history',[UserController::class,'getServiceHistory'])->name('servicehistory');
     //recharge
     Route::get('/recharge',[UserController::class,'recharge'])->name('recharge');
     Route::get('/recharge-history',[UserController::class,'getRechargeHistory'])->name('rechargehistory');
