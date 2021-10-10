@@ -62,10 +62,6 @@
                                 icon: 'error',
                                 title: 'Order thất bại, quý khách vui lòng thử lại!',
                                 showConfirmButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.href= baseUrl+'/services-history';
-                                }
                             })
                     }
                 },

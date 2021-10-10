@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ServiceBill;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Services;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -16,6 +17,7 @@ class ApiController extends Controller
 {
     public function getOrder($id, $user_id)
     {
+        $user = User::find($user_id);
         if($id){
             $price_service = Services::find($id);
             $bill = new ServiceBill();
@@ -23,7 +25,8 @@ class ApiController extends Controller
             $bill->user_id = $user_id;
             $bill->order_code = Str::random(15);
             $bill->price = $price_service->price;
-            if($bill->save()){
+            if(($user->amount - $price_service->price) > 0){
+                $bill->save();
                 return response()->json([
                     'status' => 'success',
                 ]);
@@ -58,12 +61,12 @@ class ApiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required',
-            'order_code' => 'required',          
+            'order_code' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
-        }   
+        }
         $add_phone = ServiceBill::where('order_code', $request->order_code)->first();
         if(!isset($add_phone)){
             return response()->json([
@@ -75,9 +78,9 @@ class ApiController extends Controller
             $add_phone->save();
             return response()->json([
                 'status' => 'success',
-                
+
                 'message' => 'Added phone number successfully'
             ],200);
-        }        
+        }
     }
 }
