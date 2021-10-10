@@ -19,15 +19,36 @@
     <!-- End Navbar -->
     <div class="container-fluid py-4">
         <div class="row">
-            <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+            <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body p-3">
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Tổng số đơn hàng</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Tổng số đơn thành công</p>
                                     <h5 class="font-weight-bolder mb-0">
-                                        {{ count($service_bills) }}
+                                        {{ $success }}
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                    <i class="ni ni-credit-card text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Tổng số đơn thất bại</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{ $fail }}
                                     </h5>
                                 </div>
                             </div>
@@ -59,21 +80,29 @@
                             <input class="form-control datepicker" id="date_picker" name="date" style="width: 20%; float: right; margin-top: 10px" placeholder="Please select date" type="text"
                             value="{{ date('d/m/Y', strtotime($first_day)) . ' to ' . date('d/m/Y', strtotime($last_day)) }}" >
                             <input type="text" name="name" class="form-control" placeholder="Mã đơn hàng" style="width: 20%; float: right; margin-top: 10px; margin-right: 5px" aria-describedby="basic-addon1">
-                            {{-- <select class="form-control" name="status" style="width: 20%; float: right; margin-top: 10px; margin-right: 5px">
+                            <select class="form-control" name="status" style="width: 20%; float: right; margin-top: 10px; margin-right: 5px">
                                 @if($status == 0)
                                     <option value="0" selected>Tất cả trạng thái </option>
-                                    <option value="1">Chờ xử lý</option>
-                                    <option value="2" >Đã giao hàng</option>
-                                @elseif($status == 2)
-                                    <option value="0">Tất cả trạng thái </option>
-                                    <option value="1">Chờ xử lý</option>
-                                    <option value="2" selected>Đã giao hàng</option>
+                                    <option value="1">Đang xử lý</option>
+                                    <option value="2" >Thành công</option>
+                                    <option value="3" >Đã hủy</option>
                                 @elseif($status == 1)
                                     <option value="0">Tất cả trạng thái </option>
-                                    <option value="1" selected>Chờ xử lý</option>
-                                    <option value="2">Đã giao hàng</option>
+                                    <option value="1" selected>Đang xử lý</option>
+                                    <option value="2" >Thành công</option>
+                                    <option value="3" >Đã hủy</option>
+                                @elseif($status == 2)
+                                    <option value="0">Tất cả trạng thái </option>
+                                    <option value="1">Đang xử lý</option>
+                                    <option value="2" selected>Thành công</option>
+                                    <option value="3">Đã hủy</option>
+                                @elseif($status == 3)
+                                    <option value="0">Tất cả trạng thái </option>
+                                    <option value="1">Đang xử lý</option>
+                                    <option value="2">Thành công</option>
+                                    <option value="3" selected>Đã hủy</option>
                                 @endif
-                            </select> --}}
+                            </select>
                         </form>
                         </div>
                     
@@ -109,7 +138,7 @@
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div>
-                                                    <img src="{{ asset( isset($bill) ? $bill->service->image : 'dashboard/assets/img/no_img.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
+                                                    <img src="{{ asset( isset($bill) ? $bill->service->avatar : 'dashboard/assets/img/no_img.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h6 class="mb-0 text-sm">{{ isset($bill) ? $bill->service->name : '' }}</h6>                                   
@@ -138,7 +167,7 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ $bill->phone_number }}</p>
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $bill->description }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{!! $bill->content !!}</p>
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>

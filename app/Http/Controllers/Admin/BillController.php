@@ -47,7 +47,10 @@ class BillController extends Controller
         }
         
         $service_bills = $this->repository->serviceBill($request);
-        return view('layout_admin.bills.servicebill', compact('service_bills','first_day','last_day'));
+        $success = $this->repository->countServiceBillSuccess($request);
+        $fail = $this->repository->countServiceBillFail($request);
+        $status = $request->status;
+        return view('layout_admin.bills.servicebill', compact('service_bills','first_day','last_day','status','success','fail'));
     }
     
     public function rechargeBill(Request $request)

@@ -25,8 +25,10 @@ class ApiController extends Controller
             $bill->user_id = $user_id;
             $bill->order_code = Str::random(15);
             $bill->price = $price_service->price;
-            if(($user->amount - $price_service->price) > 0){
+            $user->check_order -= 1;
+            if(($user->amount - $price_service->price) >= 0){
                 $bill->save();
+                $user->save();
                 return response()->json([
                     'status' => 'success',
                 ]);
@@ -44,7 +46,7 @@ class ApiController extends Controller
     {
         $order = ServiceBill::where('status', 0)->first();
         if ($order) {
-            $lock = Cache::lock($order->order_code, 10);
+            $lock = Cache::lock('check_order_'.$order->order_code, 10);
             if ($lock->get()) {
                 return response()->json([
                     'success' => true,
@@ -76,7 +78,7 @@ class ApiController extends Controller
         }
         $add_phone = ServiceBill::where('order_code', $request->order_code)->where('status', 0)->first();
         if (!isset($add_phone)) {
-            $lock = Cache::lock($request->phone_number, 10);
+            $lock = Cache::lock('phone_'.$request->phone_number, 10);
             if ($lock->get()) {
                 return response()->json([
                     'status' => 'error',
@@ -125,6 +127,51 @@ class ApiController extends Controller
                 'success' => false,
                 'message' => 'No code order request'
             ]);
+        }
+    }
+
+    public function updateCode(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required',
+            'order_code' => 'required',
+            'code_otp' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
+        }
+        $add_code = ServiceBill::where('order_code', $request->order_code)
+                                ->where('phone_number', $request->phone_number)
+                                ->where('code_status', 0)
+                                ->first();
+        if (!isset($add_code)) {
+            $lock = Cache::lock('code_'.$request->phone_number, 10);
+            if ($lock->get()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Add code otp failed',
+                ], 500);
+                $lock->release();
+            }else{
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Add code otp failed',
+                ], 500);
+            }
+        } else {
+            $add_code->code_otp = $request->code_otp;
+            $add_code->content = 'Mã OTP là: '.$request->code_otp.'.<br> Mã hết hạn sau 5 phút';
+            $add_code->status = 2;
+            $add_code->code_status = 1;
+            $add_code->save();
+            $user = User::find($add_code->user_id);
+            $user->check_order = 20;
+            $user->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Added code otp successfully'
+            ], 200);
         }
     }
 }

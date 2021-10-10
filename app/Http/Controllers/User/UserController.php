@@ -69,7 +69,8 @@ class UserController extends Controller
         }
         
         $bills = $this->repository->getServiceBill($request);
-        return view('user.servicehistory', compact('bills', 'first_day', 'last_day'));
+        $status = $request->status;
+        return view('user.servicehistory', compact('bills', 'first_day', 'last_day', 'status'));
     }
 
 
