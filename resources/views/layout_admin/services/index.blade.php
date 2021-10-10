@@ -221,20 +221,26 @@
             processData: false,
             success: function(data) {
                 if (data.success == true) {
-                    Swal.fire(
-                        'Thêm!',
-                        'Thêm thành công.',
-                        'success'
-                    )
-                    window.location.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thêm thành công',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        } 
+                    })
                 }
                 else {
-                    Swal.fire(
-                        'Thêm!',
-                        'Thêm thất bại.',
-                        'error'
-                    )
-                    window.location.reload();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Thêm thất bại',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        } 
+                    })
                 }
             },
             error: function(data) {
@@ -326,12 +332,15 @@
                     },
                     success: function(data) {
                         if (data.success == true) {
-                            Swal.fire(
-                                'Xóa!',
-                                'Xóa thành công.',
-                                'success'
-                            )
-                            window.location.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Xóa thành công',
+                                showConfirmButton: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload();
+                                } 
+                            })
                         }
                     }
                 })
@@ -370,20 +379,26 @@
             processData: false,
             success: function(data) {
                 if (data.success == true) {
-                    Swal.fire(
-                        'Sửa!',
-                        'Sửa thành công.',
-                        'success'
-                    )
-                    window.location.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sửa thành công',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        } 
+                    })
                 }
                 else {
-                    Swal.fire(
-                        'Sửa!',
-                        'Sửa thất bại.',
-                        'error'
-                    )
-                    window.location.reload();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sửa thất bại',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        } 
+                    })
                 }
             },
             error: function(data) {
