@@ -67,19 +67,28 @@ class ApiController extends Controller
     public function updatePhone(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required',
+            'phone_number' => 'required|unique:service_bills,phone_number',
             'order_code' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
-        $add_phone = ServiceBill::where('order_code', $request->order_code)->first();
+        $add_phone = ServiceBill::where('order_code', $request->order_code)->where('status', 0)->first();
         if (!isset($add_phone)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Add phone number failed. Incorrect order code',
-            ], 500);
+            $lock = Cache::lock($request->phone_number, 10);
+            if ($lock->get()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Add phone number failed',
+                ], 500);
+                $lock->release();
+            }else{
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Add phone number failed',
+                ], 500);
+            }
         } else {
             $add_phone->phone_number = $request->phone_number;
             $add_phone->status = 1;
