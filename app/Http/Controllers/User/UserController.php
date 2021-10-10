@@ -24,6 +24,12 @@ class UserController extends Controller
         return view('user.profile', compact('user'));
     }
 
+    public function viewService()
+    {
+        $services = $this->repository->viewService();
+        return view('user.service', compact('services'));
+    }
+
     public function updateInfo(UserRequest $request, $id)
     {
         $this->repository->updateInfo($request, $id);

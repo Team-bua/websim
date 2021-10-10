@@ -34,7 +34,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if($bills)
+                                        @if(isset($bills->phone_number))
                                         @foreach($bills as $bill)
                                         <tr>
                                             {{-- <td class="align-middle">
@@ -56,7 +56,7 @@
                                                 <p class="text-xs font-weight-bold mb-0">{{ $bill->order_code }}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <p class="text-xs font-weight-bold mb-0">{{ $bill->phone }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $bill->phone_number }}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <p class="text-xs font-weight-bold mb-0">{{ $bill->description }}</p>

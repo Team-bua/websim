@@ -46,6 +46,7 @@ Route::group(['middleware' => 'user'], function () {
 });
 
 Route::group(['middleware' => 'login'], function () {
+    Route::get('/service',[UserController::class,'viewService'])->name('user.service');
     Route::get('/profile/{id}',[UserController::class,'getProfile'])->name('profile');
     Route::post('/update-info/{id}',[UserController::class,'updateInfo'])->name('update.info');
     Route::post('/update-pass/{id}',[UserController::class,'changePass'])->name('update.pass');

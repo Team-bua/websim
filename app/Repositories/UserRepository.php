@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ServiceBill;
+use App\Models\Services;
 use App\Models\User;
 use App\Models\UserBill;
 use Carbon\Carbon;
@@ -15,6 +16,11 @@ class UserRepository
     public function getProfile($id)
     {
         return User::find($id);
+    }
+
+    public function viewService()
+    {
+        return Services::orderBy('created_at', 'desc')->get();
     }
 
     public function updateInfo($request, $id)

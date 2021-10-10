@@ -20,7 +20,11 @@
   <link id="pagestyle" href="{{ asset('dashboard/assets/css/soft-ui-dashboard.css?v=1.0.3') }}" rel="stylesheet" />
   <link rel="stylesheet" href="{{ asset('dashboard/assets/css/soft-ui-dashboard2.min.css?v=1.0.0') }}">
 </head>
-
+<style>
+  .e:hover{
+    border: 2px solid #cb0c9f;
+  }
+</style>
 <body class="g-sidenav-show  bg-gray-100">
   @include('layout_admin.slidebar')
   @yield('content')
