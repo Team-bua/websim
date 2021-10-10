@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/order/{id}/user/{userId}',[ApiController::class,'getOrder']);
-Route::get('/get-otp/{phone_number}',[ApiController::class,'getOtp']);
+Route::get('/get-otp/{order_code}/phone/{phone_number}',[ApiController::class,'getOtp']);
 Route::get('/check-order',[ApiController::class,'checkOrder']);
 Route::get('/add-phone',[ApiController::class,'updatePhone']);
 Route::get('/check-code',[ApiController::class,'checkCode']);

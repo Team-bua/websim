@@ -51,10 +51,11 @@ class ApiController extends Controller
         // dd($diff_in_minutes);
     }
 
-    public function getOtp($phone_number)
+    public function getOtp($order_code, $phone_number)
     {
         
-        $service_bill = ServiceBill::where('phone_number', $phone_number)
+        $service_bill = ServiceBill::where('order_code', $order_code)
+                                    ->where('phone_number', $phone_number)
                                     ->first();
         if($service_bill){
             $service_bill->code_status = 1;

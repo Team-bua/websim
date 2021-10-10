@@ -87,7 +87,7 @@
                                                 @if($bill->code_otp)
                                                     <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>
                                                 @else
-                                                    <a href="javascript:;" onclick="getCodeOtp('{{ $bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
+                                                    <a href="javascript:;" onclick="getCodeOtp('{{ $bill->order_code.'/phone'.'/'.$bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
                                                         <span class="badge bg-gradient-primary">Lấy mã</span>
                                                     </a>
                                                 @endif
@@ -129,10 +129,10 @@
       fixedHeight: true
     });
     
-    function getCodeOtp(phone) {
+    function getCodeOtp(order) {
 
         var baseUrl = document.location.origin;
-        var url = baseUrl+"/api/get-otp/"+phone;
+        var url = baseUrl+"/api/get-otp/"+order;
         $.ajax({
             method: 'get',
             url: url,
