@@ -128,7 +128,6 @@
     $(document).on('click', '.simpleConfirm', function(e) {
             e.preventDefault();
             var id = $(this).attr('delete_id');
-            var that = $(this);
             swal.fire({
                 title: "Bạn có muốn xóa hóa đơn này?",
                 icon: 'warning',
@@ -147,12 +146,15 @@
                         },
                         success: function(data) {
                             if (data.success == true) {
-                                that.parent().parent().remove();
-                                Swal.fire(
-                                    'Xóa!',
-                                    'Xóa thành công.',
-                                    'success'
-                                )
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Xóa thành công',
+                                    showConfirmButton: true,
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.reload();
+                                    } 
+                                })
                             }
                         }
                     })
