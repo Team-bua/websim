@@ -47,9 +47,9 @@ class ServicesController extends Controller
                 'service_avatar.required' => 'Vui lòng chọn logo',
                 'service_avatar.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif',
                 'service_avatar.max' => 'Giới hạn ảnh 2Mb',
-                'service_name.required' => 'Vui lòng điền tên dịch vụ',
+                'service_name.required' => 'Vui lòng nhập tên dịch vụ',
                 'service_name.max' => 'Tên dịch vụ không vượt quá 190 ký tự',
-                'service_price.required' => 'Vui lòng điền giá',
+                'service_price.required' => 'Vui lòng nhập giá',
                 'service_price.numeric' => 'Giá phải là định dạng số',
                 'service_price.min' => 'Giá phải lớn hơn hoặc bằng 0',
             ]
@@ -73,9 +73,9 @@ class ServicesController extends Controller
             [
                 'service_update_avatar.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif',
                 'service_update_avatar.max' => 'Giới hạn ảnh 2Mb',
-                'service_update_name.required' => 'Vui lòng điền tên dịch vụ',
+                'service_update_name.required' => 'Vui lòng nhập tên dịch vụ',
                 'service_update_name.max' => 'Tên dịch vụ không vượt quá 190 ký tự',
-                'service_update_price.required' => 'Vui lòng điền giá',
+                'service_update_price.required' => 'Vui lòng nhập giá',
                 'service_update_price.numeric' => 'Giá phải là định dạng số',
                 'service_update_price.min' => 'Giá phải lớn hơn hoặc bằng 0',
             ]
