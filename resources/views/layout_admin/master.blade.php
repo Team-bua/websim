@@ -22,7 +22,7 @@
 </head>
 <style>
   .e:hover{
-    border: 2px solid #cb0c9f;
+    background-color: rgb(248, 183, 245);
   }
 </style>
 <body class="g-sidenav-show  bg-gray-100">
