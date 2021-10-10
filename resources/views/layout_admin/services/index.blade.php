@@ -228,7 +228,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.reload();
-                        } 
+                        }
                     })
                 }
                 else {
@@ -239,7 +239,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.reload();
-                        } 
+                        }
                     })
                 }
             },
@@ -339,7 +339,7 @@
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     window.location.reload();
-                                } 
+                                }
                             })
                         }
                     }
@@ -386,7 +386,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.reload();
-                        } 
+                        }
                     })
                 }
                 else {
@@ -397,7 +397,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.reload();
-                        } 
+                        }
                     })
                 }
             },

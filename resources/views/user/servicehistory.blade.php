@@ -18,7 +18,7 @@
                                 <input type="text" name="name" class="form-control" placeholder="Mã đơn hàng" style="width: 20%; float: right; margin-top: 10px; margin-right: 5px" aria-describedby="basic-addon1">
                             </div>
                         </form>
-                        <div class="card-body px-0 pt-0 pb-2">                           
+                        <div class="card-body px-0 pt-0 pb-2">
                             <div class="table-responsive p-0">
                                 <table class="table table-flush" id="datatable-basic">
                                     <thead class="thead-light">
@@ -28,13 +28,12 @@
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Số điện thoại</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Nội dung</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Mã otp</th>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Số tiền</th>                                        
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Trạng thái</th>                                        
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Số tiền</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Trạng thái</th>
                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder">Ngày</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(isset($bills->phone_number))
                                         @foreach($bills as $bill)
                                         <tr>
                                             {{-- <td class="align-middle">
@@ -45,7 +44,7 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div>
-                                                        <img src="{{ asset( isset($bill) ? $bill->service->image : 'dashboard/assets/img/no_img.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
+                                                        <img src="{{ asset( isset($bill) ? $bill->service->avatar : 'dashboard/assets/img/no_img.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm">{{$bill->service->name }}</h6>
@@ -81,7 +80,6 @@
                                             </td>
                                         </tr>
                                         @endforeach
-                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -105,7 +103,7 @@
       flatpickr('.datepicker', {
         mode: "range",
         dateFormat: 'd/m/Y'
-      });       
+      });
     }
   </script>
 @endsection
