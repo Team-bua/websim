@@ -93,4 +93,29 @@ class ApiController extends Controller
             ], 200);
         }
     }
+
+    public function checkCode()
+    {
+        $order_code = ServiceBill::where('status', 1)->where('code_status', 0)->first();
+        if ($order_code) {
+            $lock = Cache::lock('check_code_'.$order_code->order_code, 10);
+            if ($lock->get()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Have a code order request',
+                    'order_code' => $order_code->order_code,
+                    'phone' => $order_code->phone_number,
+                    'service' => $order_code->service->name
+                ]);
+                $lock->release();
+            } else {
+                return Http::get(url("/api/check-code"));
+            }
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'No code order request'
+            ]);
+        }
+    }
 }

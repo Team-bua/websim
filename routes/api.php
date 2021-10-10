@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/order/{id}/user/{userId}',[ApiController::class,'getOrder']);
 Route::get('/check-order',[ApiController::class,'checkOrder']);
 Route::get('/add-phone',[ApiController::class,'updatePhone']);
+Route::get('/check-code',[ApiController::class,'checkCode']);

@@ -24,6 +24,7 @@ class CreateServiceBillsTable extends Migration
             $table->string('content')->nullable();
             $table->integer('price')->default(0);
             $table->integer('status')->default(0);
+            $table->integer('code_status')->default(0);
             $table->timestamps();
         });
     }
