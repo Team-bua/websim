@@ -68,8 +68,10 @@
                                             </td>
                                             <td class="align-middle text-center text-sm" id="load{{ $bill->id }}">
                                                 @if($bill->status == 1)
-                                                    <span class="badge badge-sm bg-gradient-success">Hoàn thành</span>
+                                                    <span class="badge badge-sm bg-gradient-info">Đã nhận sim</span>
                                                 @elseif($bill->status == 2)
+                                                    <span class="badge badge-sm bg-gradient-success">Thành công</span>
+                                                @elseif($bill->status == 3)
                                                     <span class="badge badge-sm bg-gradient-danger">Đã hủy</span>
                                                 @else
                                                     <span class="badge badge-sm bg-gradient-warning">Đang xử lý</span>
