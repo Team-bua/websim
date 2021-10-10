@@ -76,7 +76,7 @@ Route::get('/social-login/{provider}/callback', [LoginController::class,'handleP
 //Transaction
 Route::post('handler-bank-transfer',[FrontendController::class,'transtionInfo'])->name('transtion.info');
 
-Route::get('clear', function(){
+Route::get('/clear', function(){
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     return redirect()->back();

@@ -19,7 +19,7 @@ class UserMiddleware
     {
         if(Auth::check()){
             if(Auth::user()->role == 0){
-                return redirect(route('servicehistory'));
+                return redirect(route('user.service'));
             }
             return $next($request);
         }else{

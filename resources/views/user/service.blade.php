@@ -6,23 +6,23 @@
         <div class="row">
           @foreach ($services as $service)
           <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4" style="margin-top: 20px">
-            <div class="card e">
-                <div class="card-body p-3">
-                  <a href="#">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ $service->name }}</p>
-                                <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ number_format($service->price) }} VNĐ/Sim</p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                          <img src="{{ asset($service->avatar ? $service->avatar : 'dashboard/assets/img/no_img.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
-                        </div>
-                    </div>
-                  </a>
-                </div>
-            </div>
+            <a href="#">
+              <div class="card e">
+                  <div class="card-body p-3">    
+                      <div class="row">
+                          <div class="col-8">
+                              <div class="numbers">
+                                  <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ $service->name }}</p>
+                                  <p class="text-sm mb-0 text-capitalize font-weight-bold">{{ number_format($service->price) }} VNĐ/Sim</p>
+                              </div>
+                          </div>
+                          <div class="col-4 text-end">
+                            <img src="{{ asset($service->avatar ? $service->avatar : 'dashboard/assets/img/no_img.jpg') }}" class="avatar avatar-sm me-3" alt="user1">
+                          </div>
+                      </div>               
+                  </div>
+              </div>
+            </a>
           </div>
           @endforeach
         </div>
