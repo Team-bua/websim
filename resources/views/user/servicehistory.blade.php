@@ -87,7 +87,7 @@
                                                 @if($bill->code_otp)
                                                     <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>
                                                 @else
-                                                    <a href="javascript:;" class="text-secondary font-weight-bold text-xs" >
+                                                    <a href="javascript:;" onclick="getCodeOtp('{{ $bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
                                                         <span class="badge bg-gradient-primary">Lấy mã</span>
                                                     </a>
                                                 @endif
@@ -128,6 +128,39 @@
       searchable: false,
       fixedHeight: true
     });
+    
+    function getCodeOtp(phone) {
+
+        var baseUrl = document.location.origin;
+        var url = baseUrl+"/api/get-otp/"+phone;
+        $.ajax({
+            method: 'get',
+            url: url,
+            success: function(data) {
+                console.log(data)
+                if(data.status == 'success'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Lấy mã thành công, quý khách vui lòng chờ một chút để nhận hàng!',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href= baseUrl+'/services-history';
+                        }
+                    })
+                }else{
+                    Swal.fire({
+                            icon: 'error',
+                            title: 'Lấy mã thất bại, quý khách vui lòng thử lại!',
+                            showConfirmButton: true,
+                        })
+                }        
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        })
+    }
 </script>
 <script type="text/javascript">
     if (document.querySelector('.datepicker')) {

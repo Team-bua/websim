@@ -6,7 +6,7 @@
         <div class="row">
             @foreach ($services as $service)
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4" style="margin-top: 20px">
-                <a href="#" onclick="getOrderApi('{{ $service->id }}')">
+                <a href="javascript:;" onclick="getOrderApi('{{ $service->id }}')">
                     <div class="card e">
                         <div class="card-body p-3">
                             <div class="row">
@@ -42,45 +42,44 @@
         var baseUrl = document.location.origin;
         var userId = "{{ Auth::user()->id }}";
         var url = baseUrl+"/api/order/"+id+"/user/"+userId;
-        console.log(url);
         $.ajax({
-                method: 'get',
-                url: url,
-                success: function(data) {
-                    if(data.status == 'banned'){
+            method: 'get',
+            url: url,
+            success: function(data) {
+                if(data.status == 'banned'){
+                    Swal.fire({
+                            icon: 'error',
+                            title: 'Tài khoản đã bị khóa!',
+                            showConfirmButton: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.href= '/logout';
+                            }
+                        })
+                }else{
+                    if(data.status == 'success'){
+                    Swal.fire({
+                            icon: 'success',
+                            title: 'Order thành công, quý khách vui lòng chờ một chút để nhận hàng!',
+                            showConfirmButton: true,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.href= baseUrl+'/services-history';
+                            }
+                        })
+                    }else{
                         Swal.fire({
                                 icon: 'error',
-                                title: 'Tài khoản đã bị khóa!',
+                                title: 'Order thất bại, quý khách vui lòng thử lại!',
                                 showConfirmButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.href= '/logout';
-                                }
                             })
-                    }else{
-                        if(data.status == 'success'){
-                        Swal.fire({
-                                icon: 'success',
-                                title: 'Order thành công, quý khách vui lòng chờ một chút để nhận hàng!',
-                                showConfirmButton: true,
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.href= baseUrl+'/services-history';
-                                }
-                            })
-                        }else{
-                            Swal.fire({
-                                    icon: 'error',
-                                    title: 'Order thất bại, quý khách vui lòng thử lại!',
-                                    showConfirmButton: true,
-                                })
-                        }
-                    }           
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(textStatus);
-                }
-            })
+                    }
+                }           
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        })
     }
 </script>
 <script type="text/javascript">

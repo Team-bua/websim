@@ -38,6 +38,7 @@ class ApiController extends Controller
                     $user->save();
                     return response()->json([
                         'status' => 'success',
+                        'message' => 'Order successfully'
                     ]);
                 } else {
                     return response()->json([
@@ -50,9 +51,23 @@ class ApiController extends Controller
         // dd($diff_in_minutes);
     }
 
-    public function getOtp($order_code, $phone_number)
+    public function getOtp($phone_number)
     {
         
+        $service_bill = ServiceBill::where('phone_number', $phone_number)
+                                    ->first();
+        if($service_bill){
+            $service_bill->code_status = 1;
+            $service_bill->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Get the code successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'fail',
+            ]);
+        }
     }
 
     public function checkOrder()
@@ -120,7 +135,7 @@ class ApiController extends Controller
 
     public function checkCode()
     {
-        $order_code = ServiceBill::where('status', 1)->where('code_status', 0)->first();
+        $order_code = ServiceBill::where('status', 1)->where('code_status', 1)->first();
         if ($order_code) {
             $lock = Cache::lock('check_code_'.$order_code->order_code, 10);
             if ($lock->get()) {
@@ -156,7 +171,7 @@ class ApiController extends Controller
         }
         $add_code = ServiceBill::where('order_code', $request->order_code)
                                 ->where('phone_number', $request->phone_number)
-                                ->where('code_status', 0)
+                                ->where('code_status', 1)
                                 ->first();
         if (!isset($add_code)) {
             $lock = Cache::lock('code_'.$request->phone_number, 10);
@@ -176,7 +191,7 @@ class ApiController extends Controller
             $add_code->code_otp = $request->code_otp;
             $add_code->content = 'Mã OTP là: '.$request->code_otp.'.<br> Mã hết hạn sau 5 phút';
             $add_code->status = 2;
-            $add_code->code_status = 1;
+            $add_code->code_status = 2;
             $add_code->save();
             $user = User::find($add_code->user_id);
             $user->check_order = 20;
