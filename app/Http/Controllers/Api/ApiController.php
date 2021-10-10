@@ -18,28 +18,41 @@ class ApiController extends Controller
     public function getOrder($id, $user_id)
     {
         $user = User::find($user_id);
-        if($id){
-            $price_service = Services::find($id);
-            $bill = new ServiceBill();
-            $bill->service_id = $id;
-            $bill->user_id = $user_id;
-            $bill->order_code = Str::random(15);
-            $bill->price = $price_service->price;
-            $user->check_order -= 1;
-            if(($user->amount - $price_service->price) >= 0){
-                $bill->save();
-                $user->save();
-                return response()->json([
-                    'status' => 'success',
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'fail',
-                ]);
+        if($user->check_order == 0){
+            $user->banned_status = 1;
+            $user->save();
+            return response()->json([
+                'status' => 'banned',
+            ]);
+        }else{
+            if($id){
+                $price_service = Services::find($id);
+                $bill = new ServiceBill();
+                $bill->service_id = $id;
+                $bill->user_id = $user_id;
+                $bill->order_code = Str::random(15);
+                $bill->price = $price_service->price;
+                $user->check_order -= 1;
+                if(($user->amount - $price_service->price) >= 0){
+                    $bill->save();
+                    $user->save();
+                    return response()->json([
+                        'status' => 'success',
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 'fail',
+                    ]);
+                }
             }
-        }
+        } 
         // $diff_in_minutes = $to->diffInMinutes($from);
         // dd($diff_in_minutes);
+    }
+
+    public function getOtp($order_code, $phone_number)
+    {
+        
     }
 
     public function checkOrder()

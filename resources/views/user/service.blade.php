@@ -47,7 +47,18 @@
                 method: 'get',
                 url: url,
                 success: function(data) {
-                    if(data.status == 'success'){
+                    if(data.status == 'banned'){
+                        Swal.fire({
+                                icon: 'error',
+                                title: 'Tài khoản đã bị khóa!',
+                                showConfirmButton: true,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.href= '/logout';
+                                }
+                            })
+                    }else{
+                        if(data.status == 'success'){
                         Swal.fire({
                                 icon: 'success',
                                 title: 'Order thành công, quý khách vui lòng chờ một chút để nhận hàng!',
@@ -57,13 +68,14 @@
                                     location.href= baseUrl+'/services-history';
                                 }
                             })
-                    }else{
-                        Swal.fire({
-                                icon: 'error',
-                                title: 'Order thất bại, quý khách vui lòng thử lại!',
-                                showConfirmButton: true,
-                            })
-                    }
+                        }else{
+                            Swal.fire({
+                                    icon: 'error',
+                                    title: 'Order thất bại, quý khách vui lòng thử lại!',
+                                    showConfirmButton: true,
+                                })
+                        }
+                    }           
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     console.log(textStatus);

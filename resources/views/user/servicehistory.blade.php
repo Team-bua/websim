@@ -20,23 +20,23 @@
                                     @if($status == 0)
                                         <option value="0" selected>Tất cả trạng thái </option>
                                         <option value="1">Đang xử lý</option>
-                                        <option value="2" >Thành công</option>
-                                        <option value="3" >Đã hủy</option>
+                                        <option value="2">Thành công</option>
+                                        <option value="3">Thất bại</option>
                                     @elseif($status == 1)
                                         <option value="0">Tất cả trạng thái </option>
                                         <option value="1" selected>Đang xử lý</option>
-                                        <option value="2" >Thành công</option>
-                                        <option value="3" >Đã hủy</option>
+                                        <option value="2">Thành công</option>
+                                        <option value="3">Thất bại</option>
                                     @elseif($status == 2)
                                         <option value="0">Tất cả trạng thái </option>
                                         <option value="1">Đang xử lý</option>
                                         <option value="2" selected>Thành công</option>
-                                        <option value="3">Đã hủy</option>
+                                        <option value="3">Thất bại</option>
                                     @elseif($status == 3)
                                         <option value="0">Tất cả trạng thái </option>
                                         <option value="1">Đang xử lý</option>
                                         <option value="2">Thành công</option>
-                                        <option value="3" selected>Đã hủy</option>
+                                        <option value="3" selected>Thất bại</option>
                                     @endif
                                 </select>
                             </div>
@@ -101,7 +101,7 @@
                                                 @elseif($bill->status == 2)
                                                     <span class="badge badge-sm bg-gradient-success">Thành công</span>
                                                 @elseif($bill->status == 3)
-                                                    <span class="badge badge-sm bg-gradient-danger">Đã hủy</span>
+                                                    <span class="badge badge-sm bg-gradient-danger">Thất bại</span>
                                                 @else
                                                     <span class="badge badge-sm bg-gradient-warning">Đang xử lý</span>
                                                 @endif
