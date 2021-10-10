@@ -9,6 +9,8 @@ use App\Models\Services;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends Controller
 {
@@ -34,5 +36,48 @@ class ApiController extends Controller
         }
         // $diff_in_minutes = $to->diffInMinutes($from);
         // dd($diff_in_minutes);
+    }
+
+    public function checkOrder()
+    {
+        $order = ServiceBill::where('status', 0)->first();
+        if($order){
+            $lock = Cache::lock($order->order_code, 10);
+            if ($lock->get()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Have an order',
+                    'order_code' => $order->order_code,
+                    'service' => $order->service->name
+                ]);
+            }
+        }
+    }
+
+    public function updatePhone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required',
+            'order_code' => 'required',          
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
+        }   
+        $add_phone = ServiceBill::where('order_code', $request->order_code)->first();
+        if(!isset($add_phone)){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Add phone number failed. Incorrect order code',
+            ],500);
+        }else{
+            $add_phone->phone_number = $request->phone_number;
+            $add_phone->save();
+            return response()->json([
+                'status' => 'success',
+                
+                'message' => 'Added phone number successfully'
+            ],200);
+        }        
     }
 }
