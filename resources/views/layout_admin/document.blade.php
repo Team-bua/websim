@@ -14,10 +14,8 @@
             </nav>
             @include('layout_admin.info')
         </div>
-        </div>
     </nav>
     <!-- End Navbar -->
-    @can('admin')
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
@@ -27,7 +25,7 @@
                     </div>
                     <div class="card-body p-3">
                         <p>URL : GET=>https://webgamedemo.xyz/api/check-order</p>
-                        <p>Response : {"success":true,"message":"Have an order","order_code":"9W58VMGLrIgNAPr","service":"Tiki"}</p>
+                        <p>Kết quả : {"success":true,"message":"Have an order","order_code":"9W58VMGLrIgNAPr","service":"Tiki"}</p>
                     </div>
                 </div>
             </div>
@@ -42,27 +40,43 @@
                     </div>
                     <div class="card-body p-3">
                         <p>URL : GET=>https://webgamedemo.xyz/api/add-phone?order_code={order_code}&phone_number={phone_number}</p>
-                        <p>order_code => Mã đơn hàng ở phần kiểm tra đơn hàng</p>
+                        <p>order_code => Mã đặt hàng ở phần kiểm tra đơn hàng</p>
                         <p>phone_number => Số điện thoại tùy chọn để thêm vào</p>
-                        <p>Response : {"status":"success","message":"Added phone number successfully"}</p>
+                        <p>Kết quả : {"status":"success","message":"Added phone number successfully"}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @endcan
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
                 <div class="card h-100">
                     <div class="card-header pb-0 p-3">
-                        <h6 class="mb-0">Get Data</h6>
+                        <h6 class="mb-0">Kiểm tra yêu cầu mã otp</h6>
                     </div>
-                        <div class="card-body p-3">
-                            <p>URL : GET=>https://data.bdads.io/api/get-data/{token}</p>
-                            <p>Token : Vào trang cá nhân để lấy và nhập vào</p>
-                            <p>Ví dụ : https://data.bdads.io/api/get-data/abcxyz</p>
-                        </div>
+                    <div class="card-body p-3">
+                        <p>URL : GET=>https://webgamedemo.xyz/api/check-code</p>
+                        <p>Kết quả : {"success":true,"message":"Have a code order request","order_code":"9W58VMGLrIgNAPr", "phone":"0231234564","service":"Tiki"}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12 col-xl-12">
+                <div class="card h-100">
+                    <div class="card-header pb-0 p-3">
+                        <h6 class="mb-0">Thêm mã otp</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <p>URL : GET=>https://webgamedemo.xyz/api/add-code?order_code={order_code}&phone_number={phone_number}&code_otp={code_otp}</p>
+                        <p>order_code => Mã đặt hàng ở phần kiểm tra mã otp</p>
+                        <p>phone_number => Số điện thoại ở phần kiểm tra mã otp</p>
+                        <p>code_otp => Mã otp tùy chọn để thêm vào</p>
+                        <p>Kết quả : {"status":"success","message":"Added code otp successfully"}</p>
+                    </div>
                 </div>
             </div>
         </div>

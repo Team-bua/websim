@@ -14,7 +14,6 @@
             </nav>
             @include('layout_admin.info')
         </div>
-        </div>
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">

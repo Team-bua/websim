@@ -16,6 +16,29 @@
                                 <input class="form-control datepicker" name="date" style="width: 25%; float: right; margin-top: 10px" placeholder="Please select date" type="text"
                                 value="{{ date('d/m/Y', strtotime($first_day)) . ' to ' . date('d/m/Y', strtotime($last_day)) }}" >
                                 <input type="text" name="name" class="form-control" placeholder="Mã đơn hàng" style="width: 20%; float: right; margin-top: 10px; margin-right: 5px" aria-describedby="basic-addon1">
+                                <select class="form-control" name="status" style="width: 20%; float: right; margin-top: 10px; margin-right: 5px">
+                                    @if($status == 0)
+                                        <option value="0" selected>Tất cả trạng thái </option>
+                                        <option value="1">Đang xử lý</option>
+                                        <option value="2">Thành công</option>
+                                        <option value="3">Thất bại</option>
+                                    @elseif($status == 1)
+                                        <option value="0">Tất cả trạng thái </option>
+                                        <option value="1" selected>Đang xử lý</option>
+                                        <option value="2">Thành công</option>
+                                        <option value="3">Thất bại</option>
+                                    @elseif($status == 2)
+                                        <option value="0">Tất cả trạng thái </option>
+                                        <option value="1">Đang xử lý</option>
+                                        <option value="2" selected>Thành công</option>
+                                        <option value="3">Thất bại</option>
+                                    @elseif($status == 3)
+                                        <option value="0">Tất cả trạng thái </option>
+                                        <option value="1">Đang xử lý</option>
+                                        <option value="2">Thành công</option>
+                                        <option value="3" selected>Thất bại</option>
+                                    @endif
+                                </select>
                             </div>
                         </form>
                         <div class="card-body px-0 pt-0 pb-2">
@@ -58,10 +81,16 @@
                                                 <p class="text-xs font-weight-bold mb-0">{{ $bill->phone_number }}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <p class="text-xs font-weight-bold mb-0">{{ $bill->description }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{!! $bill->content !!}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>
+                                                @if($bill->code_otp)
+                                                    <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>
+                                                @else
+                                                    <a href="javascript:;" onclick="getCodeOtp('{{ $bill->order_code.'/phone'.'/'.$bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
+                                                        <span class="badge bg-gradient-primary">Lấy mã</span>
+                                                    </a>
+                                                @endif
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 <p class="text-xs font-weight-bold mb-0">{{ number_format($bill->price) }} VNĐ</p>
@@ -72,7 +101,7 @@
                                                 @elseif($bill->status == 2)
                                                     <span class="badge badge-sm bg-gradient-success">Thành công</span>
                                                 @elseif($bill->status == 3)
-                                                    <span class="badge badge-sm bg-gradient-danger">Đã hủy</span>
+                                                    <span class="badge badge-sm bg-gradient-danger">Thất bại</span>
                                                 @else
                                                     <span class="badge badge-sm bg-gradient-warning">Đang xử lý</span>
                                                 @endif
@@ -99,6 +128,39 @@
       searchable: false,
       fixedHeight: true
     });
+    
+    function getCodeOtp(order) {
+
+        var baseUrl = document.location.origin;
+        var url = baseUrl+"/api/get-otp/"+order;
+        $.ajax({
+            method: 'get',
+            url: url,
+            success: function(data) {
+                console.log(data)
+                if(data.status == 'success'){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Lấy mã thành công, quý khách vui lòng chờ một chút để nhận hàng!',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href= baseUrl+'/services-history';
+                        }
+                    })
+                }else{
+                    Swal.fire({
+                            icon: 'error',
+                            title: 'Lấy mã thất bại, quý khách vui lòng thử lại!',
+                            showConfirmButton: true,
+                        })
+                }        
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        })
+    }
 </script>
 <script type="text/javascript">
     if (document.querySelector('.datepicker')) {

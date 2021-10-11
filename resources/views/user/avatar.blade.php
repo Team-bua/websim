@@ -12,6 +12,15 @@
                             <span class="d-sm-inline d-none">Đăng xuất</span>
                         </a>
                     </li>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                          <div class="sidenav-toggler-inner">
+                            <i class="sidenav-toggler-line"></i>
+                            <i class="sidenav-toggler-line"></i>
+                            <i class="sidenav-toggler-line"></i>
+                          </div>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -39,7 +48,7 @@
                        {{ Auth::user()->name }}
                     </h5>
                     <p class="mb-0 font-weight-bold text-sm">
-                        Số dư : {{ number_format(Auth::user()->point) }} VNĐ
+                        Số dư : {{ number_format(Auth::user()->amount) }} VNĐ
                     </p>
                 </div>
             </div>
