@@ -48,13 +48,14 @@ class ApiController extends Controller
                     ]);
                 }
             }
-        } 
+        }
         // $diff_in_minutes = $to->diffInMinutes($from);
         // dd($diff_in_minutes);
     }
 
-    public function getOtp($phone_number)
-    {       
+    public function getOtp($order_code, $phone_number)
+    {
+
         $service_bill = ServiceBill::where('phone_number', $phone_number)
                                     ->first();
         if($service_bill->code_status == 0){
@@ -100,17 +101,27 @@ class ApiController extends Controller
         // $diff_in_minutes = $to->diffInMinutes($from);
         // dd($diff_in_minutes);
         $id_arr = [];
+        $phone_exprired_arr = [];
         $bills_exprired = ServiceBill::where('code_status', 0)->get();
         foreach ($bills_exprired as $bill_exprired){
-            if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 5){
+            if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 5 && $bill_exprired->status == 1 && $bill_exprired->expired_time == 0){
                 $id_arr[] = $bill_exprired->id;
+                $user_check_order = User::find($bill_exprired->user_id);
+                $user_check_order += 1;
+                $user_check_order->save();
+            }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone) ){
+                $phone_exprired_arr[] = $bill_exprired->id;
+                $user_check = User::find($bill_exprired->user_id);
+                $user_check += 1;
+                $user_check->save();
             }
         }
-        $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1]);
-        if($update){
+        $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1, 'status' => 3]);
+        $phone_exprired = DB::table('service_bills')->whereIn('id', $phone_exprired_arr)->update(['expired_time' => 1, 'status' => 3]);
+        if($update || $phone_exprired){
             return response()->json([
                 'status' => 'success',
-                'message' => count($id_arr).' bills expired!',
+                'message' => 'bills expired!',
             ], 200);
         }else{
             return response()->json([
