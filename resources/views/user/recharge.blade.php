@@ -1,4 +1,7 @@
 @extends('layout_admin.master')
+@section('title')
+<title>Nạp tiền</title>
+@endsection
 @section('content')
     <div class="main-content position-relative bg-gray-100 max-height-vh-100 h-100">
         <!-- Navbar -->

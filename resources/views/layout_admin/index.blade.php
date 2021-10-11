@@ -1,4 +1,7 @@
 @extends('layout_admin.master')
+@section('title')
+<title>Thống kê</title>
+@endsection
 @section('content')
 <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
     <!-- Navbar -->
