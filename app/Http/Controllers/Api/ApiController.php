@@ -53,7 +53,7 @@ class ApiController extends Controller
         // dd($diff_in_minutes);
     }
 
-    public function getOtp($order_code, $phone_number)
+    public function getOtp($phone_number)
     {
 
         $service_bill = ServiceBill::where('phone_number', $phone_number)
@@ -102,22 +102,22 @@ class ApiController extends Controller
         // dd($diff_in_minutes);
         $id_arr = [];
         $phone_exprired_arr = [];
-        $bills_exprired = ServiceBill::where('code_status', 0)->get();
+        $bills_exprired = ServiceBill::where('code_otp', '=', null)->get();
         foreach ($bills_exprired as $bill_exprired){
             if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 5 && $bill_exprired->status == 1 && $bill_exprired->expired_time == 0){
                 $id_arr[] = $bill_exprired->id;
                 $user_check_order = User::find($bill_exprired->user_id);
-                $user_check_order += 1;
+                $user_check_order->check_order += 1;
                 $user_check_order->save();
-            }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone) ){
+            }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone) && $bill_exprired->status != 3){
                 $phone_exprired_arr[] = $bill_exprired->id;
                 $user_check = User::find($bill_exprired->user_id);
-                $user_check += 1;
+                $user_check->check_order += 1;
                 $user_check->save();
             }
         }
-        $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1, 'status' => 3]);
-        $phone_exprired = DB::table('service_bills')->whereIn('id', $phone_exprired_arr)->update(['expired_time' => 1, 'status' => 3]);
+        $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1, 'status' => 3, 'code_status' => 2]);
+        $phone_exprired = DB::table('service_bills')->whereIn('id', $phone_exprired_arr)->update(['expired_time' => 1, 'status' => 3, 'code_status' => 2]);
         if($update || $phone_exprired){
             return response()->json([
                 'status' => 'success',
