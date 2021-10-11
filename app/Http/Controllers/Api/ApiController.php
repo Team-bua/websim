@@ -7,8 +7,10 @@ use App\Models\ServiceBill;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Services;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +66,31 @@ class ApiController extends Controller
         }
     }
 
+    public function checkExpired()
+    {
+        // $diff_in_minutes = $to->diffInMinutes($from);
+        // dd($diff_in_minutes);
+        $id_arr = [];
+        $bills_exprired = ServiceBill::where('code_status', 0)->get();
+        foreach ($bills_exprired as $bill_exprired){
+            if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 5){
+                $id_arr[] = $bill_exprired->id;
+            }
+        }
+        $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1]);
+        if($update){
+            return response()->json([
+                'status' => 'success',
+                'message' => count($id_arr).' bills expired!',
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'No bills expired!',
+            ], 500);
+        }
+
+    }
     public function updatePhone(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -105,7 +132,7 @@ class ApiController extends Controller
 
     public function checkCode()
     {
-        $order_code = ServiceBill::where('status', 1)->where('code_status', 0)->first();
+        $order_code = ServiceBill::where('status', 1)->where('code_status', 1)->first();
         if ($order_code) {
             $lock = Cache::lock('check_code_'.$order_code->order_code, 10);
             if ($lock->get()) {
