@@ -86,8 +86,8 @@
                                             <td class="align-middle text-center text-sm">
                                                 @if($bill->code_otp)
                                                     <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>
-                                                @else
-                                                    <a href="javascript:;" onclick="getCodeOtp('{{ $bill->order_code.'/phone'.'/'.$bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
+                                                @elseif($bill->phone_number)
+                                                    <a href="javascript:;" onclick="getCodeOtp('{{ $bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
                                                         <span class="badge bg-gradient-primary">Lấy mã</span>
                                                     </a>
                                                 @endif
@@ -129,10 +129,10 @@
       fixedHeight: true
     });
     
-    function getCodeOtp(order) {
+    function getCodeOtp(phone) {
 
         var baseUrl = document.location.origin;
-        var url = baseUrl+"/api/get-otp/"+order;
+        var url = baseUrl+"/api/get-otp/"+phone;
         $.ajax({
             method: 'get',
             url: url,
@@ -145,15 +145,19 @@
                         showConfirmButton: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            location.href= baseUrl+'/services-history';
+                            window.location.reload();
                         }
                     })
                 }else{
                     Swal.fire({
-                            icon: 'error',
-                            title: 'Lấy mã thất bại, quý khách vui lòng thử lại!',
-                            showConfirmButton: true,
-                        })
+                        icon: 'error',
+                        title: 'Quý khách đã lấy mã, vui lòng chờ!!',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    })
                 }        
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {

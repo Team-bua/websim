@@ -71,8 +71,7 @@
                         <h6 class="mb-0">Thêm mã otp</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://webgamedemo.xyz/api/add-code?order_code={order_code}&phone_number={phone_number}&code_otp={code_otp}</p>
-                        <p>order_code => Mã đặt hàng ở phần kiểm tra mã otp</p>
+                        <p>URL : GET=>https://webgamedemo.xyz/api/add-code?phone_number={phone_number}&code_otp={code_otp}</p>
                         <p>phone_number => Số điện thoại ở phần kiểm tra mã otp</p>
                         <p>code_otp => Mã otp tùy chọn để thêm vào</p>
                         <p>Kết quả : {"status":"success","message":"Added code otp successfully"}</p>
