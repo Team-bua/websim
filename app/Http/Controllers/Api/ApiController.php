@@ -79,7 +79,7 @@ class ApiController extends Controller
             $lock = Cache::lock('check_order_'.$order->order_code, 10);
             if ($lock->get()) {
                 return response()->json([
-                    'success' => true,
+                    'status' => 'success',
                     'message' => 'Have an order',
                     'order_code' => $order->order_code,
                     'service' => $order->service->name
@@ -90,7 +90,7 @@ class ApiController extends Controller
             }
         } else {
             return response()->json([
-                'success' => false,
+                'status' => 'fail',
                 'message' => 'No orders'
             ]);
         }
@@ -121,7 +121,7 @@ class ApiController extends Controller
         if($update || $phone_exprired){
             return response()->json([
                 'status' => 'success',
-                'message' => 'bills expired!',
+                'message' => 'Bills expired!',
             ], 200);
         }else{
             return response()->json([
@@ -146,13 +146,13 @@ class ApiController extends Controller
             $lock = Cache::lock('phone_'.$request->phone_number, 10);
             if ($lock->get()) {
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 'fail',
                     'message' => 'Add phone number failed',
                 ], 500);
                 $lock->release();
             }else{
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 'fail',
                     'message' => 'Add phone number failed',
                 ], 500);
             }
@@ -177,8 +177,8 @@ class ApiController extends Controller
             $lock = Cache::lock('check_code_'.$order_code->order_code, 10);
             if ($lock->get()) {
                 return response()->json([
-                    'success' => true,
-                    'message' => 'Have a code order request',
+                    'status' => 'success',
+                    'message' => 'Have a request code order',
                     'order_code' => $order_code->order_code,
                     'phone' => $order_code->phone_number,
                     'service' => $order_code->service->name
@@ -189,8 +189,8 @@ class ApiController extends Controller
             }
         } else {
             return response()->json([
-                'success' => false,
-                'message' => 'No code order request'
+                'status' => 'fail',
+                'message' => 'No request code order'
             ]);
         }
     }
@@ -212,13 +212,13 @@ class ApiController extends Controller
             $lock = Cache::lock('code_'.$request->phone_number, 10);
             if ($lock->get()) {
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 'fail',
                     'message' => 'Add code otp failed',
                 ], 500);
                 $lock->release();
             }else{
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 'fail',
                     'message' => 'Add code otp failed',
                 ], 500);
             }

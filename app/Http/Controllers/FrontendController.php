@@ -8,6 +8,8 @@ use App\Models\AutoBank;
 use App\Repositories\FrontendRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redirect;
 
 class FrontendController extends Controller
 {
@@ -80,7 +82,11 @@ class FrontendController extends Controller
     public function postLogout()
     {
         Auth::logout();
-        return redirect()->route('signin');
+        $rememberMeCookie = Auth::getRecallerName();
+        
+        $cookie = Cookie::forget($rememberMeCookie);
+
+        return Redirect::to('/')->withCookie($cookie);
     }
 
     public function transtionInfo(Request $request)
