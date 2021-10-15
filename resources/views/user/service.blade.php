@@ -61,7 +61,7 @@
                         })
                 }else{
                     if(data.status == 'success'){
-                    Swal.fire({
+                        Swal.fire({
                             icon: 'success',
                             title: 'Order thành công, quý khách vui lòng chờ một chút để nhận hàng!',
                             showConfirmButton: true,

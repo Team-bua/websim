@@ -55,7 +55,6 @@ class ApiController extends Controller
 
     public function getOtp($phone_number)
     {
-
         $service_bill = ServiceBill::where('phone_number', $phone_number)
                                     ->first();
         if($service_bill->code_status == 0){
@@ -68,6 +67,7 @@ class ApiController extends Controller
         } else {
             return response()->json([
                 'status' => 'fail',
+                'message' => 'Got the code! Please wait'
             ]);
         }
     }
@@ -106,14 +106,14 @@ class ApiController extends Controller
         foreach ($bills_exprired as $bill_exprired){
             if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 5 && $bill_exprired->status == 1 && $bill_exprired->expired_time == 0){
                 $id_arr[] = $bill_exprired->id;
-                $user_check_order = User::find($bill_exprired->user_id);
-                $user_check_order->check_order += 1;
-                $user_check_order->save();
+                // $user_check_order = User::find($bill_exprired->user_id);
+                // $user_check_order->check_order += 1;
+                // $user_check_order->save();
             }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone) && $bill_exprired->status != 3){
                 $phone_exprired_arr[] = $bill_exprired->id;
-                $user_check = User::find($bill_exprired->user_id);
-                $user_check->check_order += 1;
-                $user_check->save();
+                // $user_check = User::find($bill_exprired->user_id);
+                // $user_check->check_order += 1;
+                // $user_check->save();
             }
         }
         $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1, 'status' => 3, 'code_status' => 2]);
@@ -134,7 +134,7 @@ class ApiController extends Controller
     public function updatePhone(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required|unique:service_bills,phone_number',
+            'phone_number' => 'required|numeric|unique:service_bills,phone_number',
             'order_code' => 'required',
         ]);
 

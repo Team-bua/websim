@@ -34,8 +34,16 @@ class FrontendController extends Controller
         $this->repository = $repository;
     }
     public function viewSignIn()
-    {
-        return view('layout_index.signin');
+    {     
+        if(Auth::check()){
+            if(Auth::user()->role == 1){
+                return redirect()->route('admin');
+            }else{
+                return redirect()->route('user.service');
+            }
+        }else{
+            return view('layout_index.signin');
+        }    
     }
 
     public function postSignIn(LoginRequest $request)

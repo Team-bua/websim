@@ -87,12 +87,12 @@
                                                 <p class="text-xs font-weight-bold mb-0">{!! $bill->content !!}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                @if($bill->code_otp && $bill->status == 2)
+                                                @if($bill->code_otp)
                                                     <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>
-                                                @elseif($bill->phone_number && $bill->status != 3)
+                                                {{-- @elseif($bill->phone_number && $bill->status != 3)
                                                     <a href="javascript:;" onclick="getCodeOtp('{{ $bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
                                                         <span class="badge bg-gradient-primary">Lấy mã</span>
-                                                    </a>
+                                                    </a> --}}
                                                 @endif
                                             </td>
                                             <td class="align-middle text-center text-sm">
@@ -132,42 +132,42 @@
       fixedHeight: true
     });
     
-    function getCodeOtp(phone) {
+    // function getCodeOtp(phone) {
 
-        var baseUrl = document.location.origin;
-        var url = baseUrl+"/api/get-otp/"+phone;
-        $.ajax({
-            method: 'get',
-            url: url,
-            success: function(data) {
-                console.log(data)
-                if(data.status == 'success'){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Lấy mã thành công, quý khách vui lòng chờ một chút để nhận hàng!',
-                        showConfirmButton: true,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
-                    })
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Quý khách đã lấy mã, vui lòng chờ!!',
-                        showConfirmButton: true,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
-                    })
-                }        
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
-        })
-    }
+    //     var baseUrl = document.location.origin;
+    //     var url = baseUrl+"/api/get-otp/"+phone;
+    //     $.ajax({
+    //         method: 'get',
+    //         url: url,
+    //         success: function(data) {
+    //             console.log(data)
+    //             if(data.status == 'success'){
+    //                 Swal.fire({
+    //                     icon: 'success',
+    //                     title: 'Lấy mã thành công, quý khách vui lòng chờ một chút để nhận hàng!',
+    //                     showConfirmButton: true,
+    //                 }).then((result) => {
+    //                     if (result.isConfirmed) {
+    //                         window.location.reload();
+    //                     }
+    //                 })
+    //             }else{
+    //                 Swal.fire({
+    //                     icon: 'error',
+    //                     title: 'Quý khách đã lấy mã, vui lòng chờ!!',
+    //                     showConfirmButton: true,
+    //                 }).then((result) => {
+    //                     if (result.isConfirmed) {
+    //                         window.location.reload();
+    //                     }
+    //                 })
+    //             }        
+    //         },
+    //         error: function(XMLHttpRequest, textStatus, errorThrown) {
+    //             console.log(textStatus);
+    //         }
+    //     })
+    // }
 </script>
 <script type="text/javascript">
     if (document.querySelector('.datepicker')) {

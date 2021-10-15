@@ -19,6 +19,7 @@
         </div>
     </nav>
     <!-- End Navbar -->
+    @can('admin')
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
@@ -78,6 +79,23 @@
                         <p>phone_number => Số điện thoại ở phần kiểm tra mã otp</p>
                         <p>code_otp => Mã otp tùy chọn để thêm vào</p>
                         <p>Kết quả : {"status":"success","message":"Added code otp successfully"}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12 col-xl-12">
+                <div class="card h-100">
+                    <div class="card-header pb-0 p-3">
+                        <h6 class="mb-0">Lấy mã OTP</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <p>URL : GET=>https://webgamedemo.xyz/api/get-otp/{phone_number}</p>
+                        <p>phone_number => Số điện thoại ở phần hóa đơn dịch vụ</p>
+                        <p>Kết quả : {"status":"success","message":"Get the code successfully"}</p>
                     </div>
                 </div>
             </div>

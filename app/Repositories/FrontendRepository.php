@@ -59,15 +59,14 @@ class FrontendRepository
        }
        
        $update = User::where('code_name','=', $code_name)->first();
-       $update->point = $update->point + $amount;
+       $update->amount = $update->amount + $amount;
        $update->save();
 
        $user_bill = new UserBill();
        $user_bill->user_id = $update->id;
        $user_bill->order_id = $res_json->id;
-       $user_bill->point_purchase = $amount;
+       $user_bill->amount = $amount;
        $user_bill->description = "Nạp qua ngân hàng";
-       $user_bill->method = "Nạp tiền";
        $user_bill->status = 1;
        $user_bill->save();
     }
