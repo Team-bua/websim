@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Logo;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        view()->composer(['layout_admin.master'], function ($view) {
+        $logo = Logo::first();
+        $view->with(['index' => $logo]);
+        });
         Schema::defaultStringLength(191);
     }
 }

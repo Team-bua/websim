@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'user'], function () {
     Route::get('/admin',[AdminController::class,'viewindex'])->name('admin');
     Route::post('/admin',[AdminController::class,'viewindex'])->name('admin.search');
+    //logo
+    Route::get('/setting-logo',[AdminController::class,'viewLogo'])->name('logo');
+    Route::post('/update-logo',[AdminController::class,'updateLogo'])->name('update.logo');
     //Bank
     Route::get('/bank-info',[AdminController::class,'getBankInfo'])->name('bankinfo');
     Route::post('/update-bank-info/{id}',[AdminController::class,'updateBankInfo'])->name('update.bankinfo');
@@ -77,7 +80,7 @@ Route::get('/social-login/{provider}/callback', [LoginController::class,'handleP
 Route::post('handler-bank-transfer',[FrontendController::class,'transtionInfo'])->name('transtion.info');
 
 Route::get('/clear', function(){
-    Artisan::call('cache:clear');
-    Artisan::call('config:clear');
+    Artisan::call('migrate');
+    // Artisan::call('config:clear');
     return redirect()->back();
 });

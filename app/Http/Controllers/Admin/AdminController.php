@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BankRequest;
 use App\Models\AdminTransaction;
+use App\Models\Logo;
 use App\Models\ServiceBill;
 use App\Models\User;
 use App\Models\UserBill;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
@@ -156,5 +158,65 @@ class AdminController extends Controller
         $users->amount = $request->money;
         $users->save();
         return redirect()->back()->with('information', 'Cập nhật tiền thành công');     
+    }
+
+    public function viewLogo()
+    {
+        $logo = Logo::first();
+        return view('layout_admin.setting_logo', compact('logo'));
+    }
+
+    public function updateLogo(Request $request)
+    {
+        $logo = Logo::first();
+        $date = Carbon::now()->format('d-m-Y');
+        if(isset($logo)){
+            $update = Logo::find($logo->id);
+            $img = $request->logo;
+            if (isset($img)) {
+                if ($logo->logo) {
+                    unlink(public_path($logo->logo));
+                }
+    
+                $img_name = 'upload/logo/' . $date . '/' . Str::random(10) . rand() . '.' . $img->getClientOriginalExtension();
+                $destinationPath = public_path('upload/logo/' . $date);
+                $img->move($destinationPath, $img_name);
+    
+                $update->logo = $img_name;
+            }   
+            $icon = $request->icon;
+            if (isset($icon)) {
+                if ($logo->icon) {
+                    unlink(public_path($logo->icon));
+                }
+    
+                $icon_name = 'upload/logo/' . $date . '/' . Str::random(10) . rand() . '.' . $icon->getClientOriginalExtension();
+                $destinationPath = public_path('upload/logo/' . $date);
+                $icon->move($destinationPath, $icon_name);
+    
+                $update->icon = $icon_name;
+            }   
+            $update->save();
+        }else{
+           $create = new Logo();
+           $img = $request->logo;
+            if (isset($img)) {
+                $img_name = 'upload/logo/' . $date . '/' . Str::random(10) . rand() . '.' . $img->getClientOriginalExtension();
+                $destinationPath = public_path('upload/logo/' . $date);
+                $img->move($destinationPath, $img_name);
+    
+                $create->logo = $img_name;
+            }   
+            $icon = $request->icon;
+            if (isset($icon)) {  
+                $icon_name = 'upload/logo/' . $date . '/' . Str::random(10) . rand() . '.' . $icon->getClientOriginalExtension();
+                $destinationPath = public_path('upload/logo/' . $date);
+                $icon->move($destinationPath, $icon_name);
+    
+                $create->icon = $icon_name;
+            }   
+           $create->save();
+        }
+        return redirect()->back()->with('information', 'Cập nhật thành công');  
     }
 }
