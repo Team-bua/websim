@@ -80,7 +80,7 @@ Route::get('/social-login/{provider}/callback', [LoginController::class,'handleP
 Route::post('handler-bank-transfer',[FrontendController::class,'transtionInfo'])->name('transtion.info');
 
 Route::get('/clear', function(){
-    Artisan::call('migrate');
-    // Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
     return redirect()->back();
 });
