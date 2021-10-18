@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid py-4">
+    {{-- <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
                 <div class="card h-100">
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
@@ -90,12 +90,28 @@
             <div class="col-12 col-xl-12">
                 <div class="card h-100">
                     <div class="card-header pb-0 p-3">
+                        <h6 class="mb-0">Lấy số điện thoại</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <p>URL : GET=>https://webgamedemo.xyz/api/get-phone/{order_code}</p>
+                        <p>order_code => Mã đơn hàng khi order</p>
+                        <p>Kết quả : {"status":"success","phoneNumber":"023131456486","message":"Get phone number successfully!"}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12 col-xl-12">
+                <div class="card h-100">
+                    <div class="card-header pb-0 p-3">
                         <h6 class="mb-0">Lấy mã OTP</h6>
                     </div>
                     <div class="card-body p-3">
                         <p>URL : GET=>https://webgamedemo.xyz/api/get-otp/{phone_number}</p>
                         <p>phone_number => Số điện thoại ở phần hóa đơn dịch vụ</p>
-                        <p>Kết quả : {"status":"success","message":"Get the code successfully"}</p>
+                        <p>Kết quả : {"status":"success","CodeOTP":"123123","message":"Your Code OTP is: 123123 . This code will be expired after 5 minutes"}</p>
                     </div>
                 </div>
             </div>

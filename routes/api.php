@@ -20,11 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/order/{id}/user/{token}',[ApiController::class,'getOrder']);
-Route::get('/get-phone/{order_id}',[ApiController::class,'getPhone']);
+Route::get('/get-phone/{order_code}',[ApiController::class,'getPhone']);
 Route::get('/get-otp/{phone_number}',[ApiController::class,'getOtp']);
 Route::get('/check-order',[ApiController::class,'checkOrder']);
 Route::get('/add-phone',[ApiController::class,'updatePhone']);
-Route::get('/check-code',[ApiController::class,'checkCode']);
+// Route::get('/check-code',[ApiController::class,'checkCode']);
 
 Route::get('/check-expired',[ApiController::class,'checkExpired']);
 

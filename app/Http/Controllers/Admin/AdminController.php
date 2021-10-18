@@ -141,6 +141,7 @@ class AdminController extends Controller
     {
         $users = User::find($id);
         $users->banned_status = 1;
+        $users->user_token = null;
         $users->save();
         return redirect()->back()->with('information', 'Khóa user thành công');
     }
@@ -150,6 +151,7 @@ class AdminController extends Controller
         $users = User::find($id);
         $users->banned_status = 0;
         $users->check_order = 20;
+        $users->user_token = Str::random(20);
         $users->save();
         return redirect()->back()->with('information', 'Mở khóa user thành công');
     }

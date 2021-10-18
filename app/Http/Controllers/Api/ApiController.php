@@ -21,44 +21,54 @@ class ApiController extends Controller
     public function getOrder($id, $token)
     {
         $user = User::where('user_token', $token)->first();
-        if($user->check_order == 0){
-            $user->banned_status = 1;
-            $user->save();
-            return response()->json([
-                'status' => 'banned',
-            ]);
-        }else{
-            if($id){
-                $price_service = Services::find($id);
-                $bill = new ServiceBill();
-                $bill->service_id = $id;
-                $bill->user_id = $user->id;
-                $bill->order_code = Str::random(15);
-                $bill->price = $price_service->price;
-                $user->check_order -= 1;
-                if(($user->amount - $price_service->price) >= 0){
-                    $bill->save();
-                    $user->save();
-                    return response()->json([
-                        'status' => 'success',
-                        'orderID' => $bill->order_code,
-                        'message' => 'Order successfully'
-                    ]);
-                } else {
-                    return response()->json([
-                        'status' => 'fail',
-                        'message' => 'Order failed! Please try again'
-                    ]);
+        if($user){
+            if($user->check_order == 0){
+                $user->banned_status = 1;
+                $user->user_token = null;
+                $user->save();
+                return response()->json([
+                    'status' => 'banned',
+                    'message' => 'Your account has been banned',
+                ]);
+            }else{
+                if($id){
+                    $price_service = Services::find($id);
+                    $bill = new ServiceBill();
+                    $bill->service_id = $id;
+                    $bill->user_id = $user->id;
+                    $bill->order_code = Str::random(15);
+                    $bill->price = $price_service->price;
+                    $user->check_order -= 1;
+                    if(($user->amount - $price_service->price) >= 0){
+                        $bill->save();
+                        $user->save();
+                        return response()->json([
+                            'status' => 'success',
+                            'orderCode' => $bill->order_code,
+                            'message' => 'Order successfully'
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => 'fail',
+                            'message' => 'Order failed! Please try again'
+                        ]);
+                    }
                 }
             }
+        }else{
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Unknown user token'
+            ]);
         }
+       
         // $diff_in_minutes = $to->diffInMinutes($from);
         // dd($diff_in_minutes);
     }
 
-    public function getPhone($order_id)
+    public function getPhone($order_code)
     {
-        $bill = ServiceBill::where('order_code', $order_id)->first();
+        $bill = ServiceBill::where('order_code', $order_code)->where('status', 1 )->first();
         if($bill){
             $lock = Cache::lock('get_phone_'.$bill->phone_number, 10);
             if($lock->get()){
@@ -68,6 +78,7 @@ class ApiController extends Controller
                         'phoneNumber' => $bill->phone_number,
                         'message' => 'Get phone number successfully!',
                     ]);
+                    $lock->release();
                 }else{
                     return response()->json([
                         'status' => 'fail',
@@ -89,15 +100,14 @@ class ApiController extends Controller
 
     public function getOtp($phone_number)
     {
-        $service_bill = ServiceBill::where('phone_number', $phone_number)
-                                    ->first();
+        $service_bill = ServiceBill::where('phone_number', $phone_number)->where('status', 1)->first();
         if($service_bill->code_otp != ''){
             $service_bill->status = 2;
             $service_bill->save();
             return response()->json([
                 'status' => 'success',
                 'CodeOTP' => $service_bill->code_otp,
-                'message' => 'Your Code OTP is: '.$service_bill->code_otp.' , this code will be expired after 5 minutes'
+                'message' => 'Your Code OTP is: '.$service_bill->code_otp.' . This code will be expired after 5 minutes'
             ]);
         } else {
             return response()->json([
