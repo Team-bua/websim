@@ -7,6 +7,7 @@ use App\Http\Requests\BankRequest;
 use App\Models\AdminTransaction;
 use App\Models\Logo;
 use App\Models\ServiceBill;
+use App\Models\Services;
 use App\Models\User;
 use App\Models\UserBill;
 use Carbon\Carbon;
@@ -98,7 +99,8 @@ class AdminController extends Controller
 
     public function documentAPI()
     {
-        return view('layout_admin.document');
+        $services = Services::orderBy('created_at', 'desc')->get();
+        return view('layout_admin.document', compact('services'));
     }
 
     public function getBankInfo(Request $request)

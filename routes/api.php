@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/order/{id}/user/{userId}',[ApiController::class,'getOrder']);
+Route::get('/order/{id}/user/{token}',[ApiController::class,'getOrder']);
 Route::get('/get-otp/{phone_number}',[ApiController::class,'getOtp']);
 Route::get('/check-order',[ApiController::class,'checkOrder']);
 Route::get('/add-phone',[ApiController::class,'updatePhone']);

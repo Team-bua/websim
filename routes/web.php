@@ -55,6 +55,8 @@ Route::group(['middleware' => 'login'], function () {
     Route::post('/update-pass/{id}',[UserController::class,'changePass'])->name('update.pass');
     //Service history
     Route::get('/services-history',[UserController::class,'getServiceHistory'])->name('servicehistory');
+    //Transaction history
+    Route::get('/transaction-history',[UserController::class,'getTransactionHistory'])->name('transactionhistory');
     //recharge
     Route::get('/recharge',[UserController::class,'recharge'])->name('recharge');
     Route::get('/recharge-history',[UserController::class,'getRechargeHistory'])->name('rechargehistory');
@@ -80,6 +82,7 @@ Route::get('/social-login/{provider}/callback', [LoginController::class,'handleP
 Route::post('handler-bank-transfer',[FrontendController::class,'transtionInfo'])->name('transtion.info');
 
 Route::get('/clear', function(){
+    // Artisan::call('migrate');
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     return redirect()->back();

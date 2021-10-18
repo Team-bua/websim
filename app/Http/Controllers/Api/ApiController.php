@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\HistoryTransaction;
 use App\Models\ServiceBill;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Services;
@@ -17,9 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends Controller
 {
-    public function getOrder($id, $user_id)
+    public function getOrder($id, $token)
     {
-        $user = User::find($user_id);
+        $user = User::where('user_token', $token)->first();
         if($user->check_order == 0){
             $user->banned_status = 1;
             $user->save();
@@ -31,7 +32,7 @@ class ApiController extends Controller
                 $price_service = Services::find($id);
                 $bill = new ServiceBill();
                 $bill->service_id = $id;
-                $bill->user_id = $user_id;
+                $bill->user_id = $user->id;
                 $bill->order_code = Str::random(15);
                 $bill->price = $price_service->price;
                 $user->check_order -= 1;
@@ -45,6 +46,7 @@ class ApiController extends Controller
                 } else {
                     return response()->json([
                         'status' => 'fail',
+                        'message' => 'Order failed! Please try again'
                     ]);
                 }
             }
@@ -62,12 +64,12 @@ class ApiController extends Controller
             $service_bill->save();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Get the code successfully'
+                'message' => 'Please wait for the code'
             ]);
         } else {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Got the code! Please wait'
+                'message' => 'Please wait for the code'
             ]);
         }
     }
@@ -106,14 +108,25 @@ class ApiController extends Controller
         foreach ($bills_exprired as $bill_exprired){
             if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 5 && $bill_exprired->status == 1 && $bill_exprired->expired_time == 0){
                 $id_arr[] = $bill_exprired->id;
-                // $user_check_order = User::find($bill_exprired->user_id);
-                // $user_check_order->check_order += 1;
-                // $user_check_order->save();
+                $bill_price = $bill_exprired->price;
+                $service = $bill_exprired->service->name;
+                $phone = $bill_exprired->phone_number;
+                $user_check_order = User::find($bill_exprired->user_id);
+                $user_check_order->amount = $user_check_order->amount + $bill_exprired->price;   
+                $user_check_order->save();
+                $prices = $user_check_order->amount - $bill_price;
+                $transaction = new HistoryTransaction();
+                $transaction->user_id = $user_check_order->id;
+                $transaction->price = $bill_price; 
+                $transaction->volatility = number_format($prices).' -> '.number_format($user_check_order->amount); 
+                $transaction->content = 'Hoàn tiền '.$service.'/'.$phone; 
+                $transaction->status = 1;
+                $transaction->save();
             }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone) && $bill_exprired->status != 3){
                 $phone_exprired_arr[] = $bill_exprired->id;
-                // $user_check = User::find($bill_exprired->user_id);
-                // $user_check->check_order += 1;
-                // $user_check->save();
+                $user_check = User::find($bill_exprired->user_id);
+                $user_check->amount = $user_check->amount + $bill_exprired->price;
+                $user_check->save();
             }
         }
         $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1, 'status' => 3, 'code_status' => 2]);
@@ -231,6 +244,13 @@ class ApiController extends Controller
             $user = User::find($add_code->user_id);
             $user->check_order = 20;
             $user->save();
+            $price = $user->amount + $add_code->price;
+            $transaction = new HistoryTransaction();
+            $transaction->user_id = $user->id;
+            $transaction->price = $add_code->price; 
+            $transaction->volatility = number_format($price).' -> '.number_format($user->amount); 
+            $transaction->content = 'Mua sim '.$add_code->service->name.'/'.$add_code->phone_number; 
+            $transaction->save();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Added code otp successfully'

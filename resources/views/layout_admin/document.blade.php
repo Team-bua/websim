@@ -101,5 +101,49 @@
             </div>
         </div>
     </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12 col-xl-12">
+                <div class="card h-100">
+                    <div class="card-header pb-0 p-3">
+                        <h6 class="mb-0">Order dịch vụ</h6>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModalMessage">
+                            <button class="btn bg-gradient-info mt-4 w-12">
+                                <i class="fa fa-book">&nbsp; Danh sách dịch vụ </i></button>
+                        </a>
+                    </div>
+                    <div class="card-body p-3">
+                        <p>URL : GET=>https://webgamedemo.xyz/api/order/{id}/user/{token}</p>
+                        <p>id => Mở trang danh sách dịch vụ để nhận id theo dịch vụ</p>
+                        <p>token => Vào trang thông tin để lấy token</p>
+                        <p>Kết quả : {"status":"success","message":"Order successfully"}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalMessageTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Danh sách dịch vụ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body p-3">
+                            @foreach ($services as $service)
+                                <p>ID : {{ $service->id }} => Dịch vụ : {{ $service->name }}</p>
+                            @endforeach         
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 @endsection

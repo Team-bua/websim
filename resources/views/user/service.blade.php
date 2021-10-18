@@ -33,18 +33,12 @@
 </main>
 @endsection
 @section('script')
-<script src="{{ asset('dashboard/assets/js/plugins/datatables.js') }}" type="text/javascript"></script>
 <script>
-    const dataTableBasic = new simpleDatatables.DataTable("#datatable-basic", {
-        searchable: false,
-        fixedHeight: true
-    });
-
     function getOrderApi(id) {
 
         var baseUrl = document.location.origin;
-        var userId = "{{ Auth::user()->id }}";
-        var url = baseUrl+"/api/order/"+id+"/user/"+userId;
+        var token = "{{ Auth::user()->user_token }}";
+        var url = baseUrl+"/api/order/"+id+"/user/"+token;
         $.ajax({
             method: 'get',
             url: url,
