@@ -41,6 +41,7 @@ class ApiController extends Controller
                     $user->save();
                     return response()->json([
                         'status' => 'success',
+                        'orderID' => $bill->order_code,
                         'message' => 'Order successfully'
                     ]);
                 } else {
@@ -55,16 +56,48 @@ class ApiController extends Controller
         // dd($diff_in_minutes);
     }
 
+    public function getPhone($order_id)
+    {
+        $bill = ServiceBill::where('order_code', $order_id)->first();
+        if($bill){
+            $lock = Cache::lock('get_phone_'.$bill->phone_number, 10);
+            if($lock->get()){
+                if($bill->phone_number){
+                    return response()->json([
+                        'status' => 'success',
+                        'phoneNumber' => $bill->phone_number,
+                        'message' => 'Get phone number successfully!',
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 'fail',
+                        'phoneNumber' => '',
+                        'message' => 'No phone number yet!',
+                    ]);
+                }
+            }
+            else{
+                return response()->json([
+                    'status' => 'fail',
+                    'phoneNumber' => '',
+                    'message' => 'No order yet!',
+                ]);
+            }
+        }
+    }
+
+
     public function getOtp($phone_number)
     {
         $service_bill = ServiceBill::where('phone_number', $phone_number)
                                     ->first();
-        if($service_bill->code_status == 0){
-            $service_bill->code_status = 1;
+        if($service_bill->code_otp != ''){
+            $service_bill->status = 2;
             $service_bill->save();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Please wait for the code'
+                'CodeOTP' => $service_bill->code_otp,
+                'message' => 'Your Code OTP is: '.$service_bill->code_otp.' , this code will be expired after 5 minutes'
             ]);
         } else {
             return response()->json([
@@ -112,14 +145,14 @@ class ApiController extends Controller
                 $service = $bill_exprired->service->name;
                 $phone = $bill_exprired->phone_number;
                 $user_check_order = User::find($bill_exprired->user_id);
-                $user_check_order->amount = $user_check_order->amount + $bill_exprired->price;   
+                $user_check_order->amount = $user_check_order->amount + $bill_exprired->price;
                 $user_check_order->save();
                 $prices = $user_check_order->amount - $bill_price;
                 $transaction = new HistoryTransaction();
                 $transaction->user_id = $user_check_order->id;
-                $transaction->price = $bill_price; 
-                $transaction->volatility = number_format($prices).' -> '.number_format($user_check_order->amount); 
-                $transaction->content = 'Hoàn tiền '.$service.'/'.$phone; 
+                $transaction->price = $bill_price;
+                $transaction->volatility = number_format($prices).' -> '.number_format($user_check_order->amount);
+                $transaction->content = 'Hoàn tiền '.$service.'/'.$phone;
                 $transaction->status = 1;
                 $transaction->save();
             }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone) && $bill_exprired->status != 3){
@@ -172,7 +205,9 @@ class ApiController extends Controller
         } else {
             $add_phone->phone_number = $request->phone_number;
             $add_phone->status = 1;
+            $add_phone->code_status = 1;
             $add_phone->save();
+
             $user = User::find($add_phone->user_id);
             $user->amount = $user->amount - $add_phone->price;
             $user->save();
@@ -226,19 +261,18 @@ class ApiController extends Controller
             if ($lock->get()) {
                 return response()->json([
                     'status' => 'fail',
-                    'message' => 'Add code otp failed',
+                    'message' => 'This order already has a code otp!',
                 ], 500);
                 $lock->release();
             }else{
                 return response()->json([
                     'status' => 'fail',
-                    'message' => 'Add code otp failed',
+                    'message' => 'This order already has a code otp!',
                 ], 500);
             }
         } else {
             $add_code->code_otp = $request->code_otp;
             $add_code->content = 'Mã OTP là: '.$request->code_otp.'.<br> Mã hết hạn sau 5 phút';
-            $add_code->status = 2;
             $add_code->code_status = 2;
             $add_code->save();
             $user = User::find($add_code->user_id);
@@ -247,9 +281,9 @@ class ApiController extends Controller
             $price = $user->amount + $add_code->price;
             $transaction = new HistoryTransaction();
             $transaction->user_id = $user->id;
-            $transaction->price = $add_code->price; 
-            $transaction->volatility = number_format($price).' -> '.number_format($user->amount); 
-            $transaction->content = 'Mua sim '.$add_code->service->name.'/'.$add_code->phone_number; 
+            $transaction->price = $add_code->price;
+            $transaction->volatility = number_format($price).' -> '.number_format($user->amount);
+            $transaction->content = 'Mua sim '.$add_code->service->name.'/'.$add_code->phone_number;
             $transaction->save();
             return response()->json([
                 'status' => 'success',

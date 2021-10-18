@@ -84,11 +84,11 @@
                                                 <p class="text-xs font-weight-bold mb-0">{{ $bill->phone_number }}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <p class="text-xs font-weight-bold mb-0">{!! $bill->content !!}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{!! $bill->status == 2 ? $bill->content : '' !!}</p>
                                             </td>
                                             <td class="align-middle text-center text-sm">
                                                 @if($bill->code_otp)
-                                                    <p class="text-xs font-weight-bold mb-0">{{ $bill->code_otp }}</p>
+                                                    <p class="text-xs font-weight-bold mb-0">{{ $bill->status == 2 ? $bill->code_otp : ''  }}</p>
                                                 {{-- @elseif($bill->phone_number && $bill->status != 3)
                                                     <a href="javascript:;" onclick="getCodeOtp('{{ $bill->phone_number }}')" class="text-secondary font-weight-bold text-xs" >
                                                         <span class="badge bg-gradient-primary">Lấy mã</span>
@@ -131,7 +131,7 @@
       searchable: false,
       fixedHeight: true
     });
-    
+
     // function getCodeOtp(phone) {
 
     //     var baseUrl = document.location.origin;
@@ -161,7 +161,7 @@
     //                         window.location.reload();
     //                     }
     //                 })
-    //             }        
+    //             }
     //         },
     //         error: function(XMLHttpRequest, textStatus, errorThrown) {
     //             console.log(textStatus);

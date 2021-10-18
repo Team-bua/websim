@@ -71,7 +71,7 @@
                                 showConfirmButton: true,
                             })
                     }
-                }           
+                }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus);
