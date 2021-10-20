@@ -95,6 +95,14 @@ class ApiController extends Controller
                 ]);
             }
         }
+        else
+        {
+            return response()->json([
+                'status' => 'fail',
+                'phoneNumber' => '',
+                'message' => 'No order yet!',
+            ]);
+        }
     }
 
 
