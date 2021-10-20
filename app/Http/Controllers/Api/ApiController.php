@@ -100,7 +100,7 @@ class ApiController extends Controller
             return response()->json([
                 'status' => 'fail',
                 'phoneNumber' => '',
-                'message' => 'No order yet!',
+                'message' => 'This order is already paid!',
             ]);
         }
     }
@@ -110,8 +110,6 @@ class ApiController extends Controller
     {
         $service_bill = ServiceBill::where('phone_number', $phone_number)->where('status', 1)->first();
         if($service_bill->code_otp != ''){
-            $service_bill->status = 2;
-            $service_bill->save();
             return response()->json([
                 'status' => 'success',
                 'CodeOTP' => $service_bill->code_otp,
@@ -292,6 +290,7 @@ class ApiController extends Controller
             $add_code->code_otp = $request->code_otp;
             $add_code->content = 'Mã OTP là: '.$request->code_otp.'.<br> Mã hết hạn sau 5 phút';
             $add_code->code_status = 2;
+            $add_code->status = 2;
             $add_code->save();
             $user = User::find($add_code->user_id);
             $user->check_order = 20;
