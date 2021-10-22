@@ -176,7 +176,7 @@ class ApiController extends Controller
                 $transaction->content = 'Hoàn tiền '.$service.'/'.$phone;
                 $transaction->status = 1;
                 $transaction->save();
-            }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone) && $bill_exprired->status != 3){
+            }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone_number) && $bill_exprired->status != 3){
                 $phone_exprired_arr[] = $bill_exprired->id;
                 $user_check = User::find($bill_exprired->user_id);
                 $user_check->amount = $user_check->amount + $bill_exprired->price;

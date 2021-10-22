@@ -39,6 +39,9 @@
                                     <img id="img" class="border-radius-lg shadow-sm" style="width: 120px; height: 120px;"
                                         src="{{ asset(isset($logo->logo) ? $logo->logo : 'dashboard/assets/img/no_img.jpg') }}">
                                 </div>
+                                @error('logo')
+                                    <p style="color:red; font-size: 13px; margin-left: 5px">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <div class="card-header pb-0 p-3">
@@ -50,6 +53,9 @@
                                     <img id="thum" class="border-radius-lg shadow-sm" style="width: 120px; height: 120px;"
                                         src="{{ asset(isset($logo->icon) ? $logo->icon :'dashboard/assets/img/no_img.jpg') }}">
                                 </div>
+                                @error('icon')
+                                    <p style="color:red; font-size: 13px; margin-left: 5px">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn bg-gradient-primary w-12">Cập nhật </button>

@@ -172,6 +172,18 @@ class AdminController extends Controller
 
     public function updateLogo(Request $request)
     {
+        request()->validate(
+            [
+                'logo' => 'mimes:jpg,jpeg,png,gif|max:2048',
+                'icon' => 'mimes:jpg,jpeg,png,gif|max:2048',
+            ],
+            [
+                'logo.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif',
+                'logo.max' => 'Giới hạn ảnh 2Mb',
+                'icon.mimes' => 'Chỉ gắn thẻ hình ảnh có đuôi .jpg .jpeg .png .gif',
+                'icon.max' => 'Giới hạn ảnh 2Mb',
+            ]
+        );
         $logo = Logo::first();
         $date = Carbon::now()->format('d-m-Y');
         if(isset($logo)){
