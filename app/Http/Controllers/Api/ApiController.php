@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -126,7 +127,7 @@ class ApiController extends Controller
     public function checkOrder()
     {
         $order = ServiceBill::where('status', 0)->first();
-        if ($order) {
+        if (isset($order)) {
             $lock = Cache::lock('check_order_'.$order->order_code, 10);
             if ($lock->get()) {
                 return response()->json([
@@ -136,9 +137,13 @@ class ApiController extends Controller
                     'service' => $order->service->name
                 ]);
                 $lock->release();
+                Artisan::call('cache:clear');
             } else {
+                $lock->release();
+                Artisan::call('cache:clear');
                 return Http::get(url("/api/check-order"));
             }
+            
         } else {
             return response()->json([
                 'status' => 'fail',
@@ -248,7 +253,10 @@ class ApiController extends Controller
                     'service' => $order_code->service->name
                 ]);
                 $lock->release();
+                Artisan::call('cache:clear');
             } else {
+                $lock->release();
+                Artisan::call('cache:clear');
                 return Http::get(url("/api/check-code"));
             }
         } else {
@@ -280,6 +288,7 @@ class ApiController extends Controller
                     'message' => 'This order already has a code otp!',
                 ], 500);
                 $lock->release();
+                Artisan::call('cache:clear');
             }else{
                 return response()->json([
                     'status' => 'fail',
