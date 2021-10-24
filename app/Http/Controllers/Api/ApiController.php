@@ -110,7 +110,7 @@ class ApiController extends Controller
     public function getOtp($phone_number)
     {
         $service_bill = ServiceBill::where('phone_number', $phone_number)->where('status', 1)->first();
-        if(isset($service_bill) && $service_bill->code_otp != ''){
+        if(isset($service_bill->code_otp) && $service_bill->code_otp != ''){
             return response()->json([
                 'status' => 'success',
                 'CodeOTP' => $service_bill->code_otp,
