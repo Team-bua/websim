@@ -141,7 +141,7 @@ class ApiController extends Controller
 
     public function checkOrder()
     {
-        $order = ServiceBill::where('checked_status', 0)->where('expired_t ime',0)->first();
+        $order = ServiceBill::where('checked_status', 0)->where('expired_time',0)->first();
         if (isset($order)) {
             $lock = Cache::lock('check_order_'.$order->order_code, 10);
             if ($lock->get()) {
@@ -247,6 +247,13 @@ class ApiController extends Controller
             $user = User::find($add_phone->user_id);
             $user->amount = $user->amount - $add_phone->price;
             $user->save();
+            $price = $user->amount + $add_phone->price;
+            $transaction = new HistoryTransaction();
+            $transaction->user_id = $user->id;
+            $transaction->price = $add_phone->price;
+            $transaction->volatility = number_format($price).' -> '.number_format($user->amount);
+            $transaction->content = 'Mua sim '.$add_phone->service->name.'/'.$add_phone->phone_number;
+            $transaction->save();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Added phone number successfully'
@@ -317,13 +324,6 @@ class ApiController extends Controller
             $user = User::find($add_code->user_id);
             $user->check_order = 20;
             $user->save();
-            $price = $user->amount + $add_code->price;
-            $transaction = new HistoryTransaction();
-            $transaction->user_id = $user->id;
-            $transaction->price = $add_code->price;
-            $transaction->volatility = number_format($price).' -> '.number_format($user->amount);
-            $transaction->content = 'Mua sim '.$add_code->service->name.'/'.$add_code->phone_number;
-            $transaction->save();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Added code otp successfully'
