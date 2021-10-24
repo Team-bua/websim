@@ -21,11 +21,11 @@ class ApiController extends Controller
 {
     public function getOrder($id, $token)
     {
-        $user = User::where('user_token', $token)->first();
+        $user = User::where('user_token', $token)->where('banned_status', 0)->first();
         if($user){
             if($user->check_order == 0){
                 $user->banned_status = 1;
-                $user->user_token = null;
+                $user->user_token = '';
                 $user->save();
                 return response()->json([
                     'status' => 'banned',
@@ -126,10 +126,11 @@ class ApiController extends Controller
 
     public function checkOrder()
     {
-        $order = ServiceBill::where('status', 0)->first();
+        $order = ServiceBill::where('checked_status', 0)->where('expired_time',0)->first();
         if (isset($order)) {
             $lock = Cache::lock('check_order_'.$order->order_code, 10);
             if ($lock->get()) {
+                $order->update(['checked_status' => 1]);
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Have an order',
@@ -139,7 +140,6 @@ class ApiController extends Controller
                 $lock->release();
                 Artisan::call('cache:clear');
             } else {
-                $lock->release();
                 Artisan::call('cache:clear');
                 return Http::get(url("/api/check-order"));
             }
@@ -178,9 +178,9 @@ class ApiController extends Controller
                 $transaction->save();
             }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone_number) && $bill_exprired->status != 3){
                 $phone_exprired_arr[] = $bill_exprired->id;
-                $user_check = User::find($bill_exprired->user_id);
-                $user_check->amount = $user_check->amount + $bill_exprired->price;
-                $user_check->save();
+                // $user_check = User::find($bill_exprired->user_id);
+                // $user_check->amount = $user_check->amount + $bill_exprired->price;
+                // $user_check->save();
             }
         }
         $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1, 'status' => 3, 'code_status' => 2]);
@@ -255,8 +255,6 @@ class ApiController extends Controller
                 $lock->release();
                 Artisan::call('cache:clear');
             } else {
-                $lock->release();
-                Artisan::call('cache:clear');
                 return Http::get(url("/api/check-code"));
             }
         } else {
