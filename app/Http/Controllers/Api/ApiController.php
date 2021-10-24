@@ -243,7 +243,7 @@ class ApiController extends Controller
             $add_phone->status = 1;
             $add_phone->code_status = 1;
             $add_phone->save();
-
+            
             $user = User::find($add_phone->user_id);
             $user->amount = $user->amount - $add_phone->price;
             $user->save();
