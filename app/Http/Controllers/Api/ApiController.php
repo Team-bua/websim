@@ -126,7 +126,7 @@ class ApiController extends Controller
 
     public function checkOrder()
     {
-        $order = ServiceBill::where('checked_status', 0)->where('expired_t ime',0)->first();
+        $order = ServiceBill::where('checked_status', 0)->where('expired_time',0)->first();
         if (isset($order)) {
             $lock = Cache::lock('check_order_'.$order->order_code, 10);
             if ($lock->get()) {
