@@ -87,7 +87,7 @@ class UserRepository
                             $q->where('status', 1);
                         });
                     })
-                    ->orderBy('created_at', 'desc')     
+                    ->orderBy('id', 'desc')     
                     ->get();
         return $all_bill;
     }

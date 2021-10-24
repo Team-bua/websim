@@ -178,9 +178,6 @@ class ApiController extends Controller
                 $transaction->save();
             }else if(Carbon::now()->diffInMinutes($bill_exprired->updated_at) >= 10 && !isset($bill_exprired->phone_number) && $bill_exprired->status != 3){
                 $phone_exprired_arr[] = $bill_exprired->id;
-                // $user_check = User::find($bill_exprired->user_id);
-                // $user_check->amount = $user_check->amount + $bill_exprired->price;
-                // $user_check->save();
             }
         }
         $update =  DB::table('service_bills')->whereIn('id', $id_arr)->update(['expired_time' => 1, 'status' => 3, 'code_status' => 2]);
@@ -232,6 +229,14 @@ class ApiController extends Controller
             $user = User::find($add_phone->user_id);
             $user->amount = $user->amount - $add_phone->price;
             $user->save();
+
+            $price = $user->amount + $add_phone->price;
+            $transaction = new HistoryTransaction();
+            $transaction->user_id = $user->id;
+            $transaction->price = $add_phone->price;
+            $transaction->volatility = number_format($price).' -> '.number_format($user->amount);
+            $transaction->content = 'Mua sim '.$add_phone->service->name.'/'.$add_phone->phone_number;
+            $transaction->save();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Added phone number successfully'
@@ -302,13 +307,6 @@ class ApiController extends Controller
             $user = User::find($add_code->user_id);
             $user->check_order = 20;
             $user->save();
-            $price = $user->amount + $add_code->price;
-            $transaction = new HistoryTransaction();
-            $transaction->user_id = $user->id;
-            $transaction->price = $add_code->price;
-            $transaction->volatility = number_format($price).' -> '.number_format($user->amount);
-            $transaction->content = 'Mua sim '.$add_code->service->name.'/'.$add_code->phone_number;
-            $transaction->save();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Added code otp successfully'
