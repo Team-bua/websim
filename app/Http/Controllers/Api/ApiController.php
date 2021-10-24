@@ -62,7 +62,7 @@ class ApiController extends Controller
                 'message' => 'Unknown user token'
             ]);
         }
-       
+
         // $diff_in_minutes = $to->diffInMinutes($from);
         // dd($diff_in_minutes);
     }
@@ -110,7 +110,7 @@ class ApiController extends Controller
     public function getOtp($phone_number)
     {
         $service_bill = ServiceBill::where('phone_number', $phone_number)->where('status', 1)->first();
-        if($service_bill->code_otp != ''){
+        if(isset($service_bill) && $service_bill->code_otp != ''){
             return response()->json([
                 'status' => 'success',
                 'CodeOTP' => $service_bill->code_otp,
@@ -119,7 +119,7 @@ class ApiController extends Controller
         } else {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Please wait for the code'
+                'message' => 'No code available yet!'
             ]);
         }
     }
@@ -143,7 +143,7 @@ class ApiController extends Controller
                 Artisan::call('cache:clear');
                 return Http::get(url("/api/check-order"));
             }
-            
+
         } else {
             return response()->json([
                 'status' => 'fail',
