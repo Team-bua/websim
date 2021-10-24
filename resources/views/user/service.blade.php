@@ -64,10 +64,16 @@
                                 location.href= baseUrl+'/services-history';
                             }
                         })
-                    }else{
+                    }else if (data.status == 'fail'){
                         Swal.fire({
                                 icon: 'error',
                                 title: 'Order thất bại, quý khách vui lòng thử lại!',
+                                showConfirmButton: true,
+                            })
+                    }else {
+                        Swal.fire({
+                                icon: 'error',
+                                title: 'Order thất bại, số dư của quý khách không đủ, vui lòng thử lại sau!',
                                 showConfirmButton: true,
                             })
                     }

@@ -21,7 +21,12 @@ class ApiController extends Controller
 {
     public function getOrder($id, $token)
     {
+        $prices = 0;
         $user = User::where('user_token', $token)->where('banned_status', 0)->first();
+        $user_bill_price = ServiceBill::select('price')->where('status', 0)->where('user_id', $user->id)->get();
+        foreach ($user_bill_price as $price){
+            $prices += $price->price;
+        }
         if($user){
             if($user->check_order == 0){
                 $user->banned_status = 1;
@@ -34,24 +39,34 @@ class ApiController extends Controller
             }else{
                 if($id){
                     $price_service = Services::find($id);
-                    $bill = new ServiceBill();
-                    $bill->service_id = $id;
-                    $bill->user_id = $user->id;
-                    $bill->order_code = Str::random(15);
-                    $bill->price = $price_service->price;
-                    $user->check_order -= 1;
-                    if(($user->amount - $price_service->price) >= 0){
-                        $bill->save();
-                        $user->save();
+                    $check_amount = $prices + $price_service->price;
+                    if($user->amount - $check_amount >= 0){
+                        $bill = new ServiceBill();
+                        $bill->service_id = $id;
+                        $bill->user_id = $user->id;
+                        $bill->order_code = Str::random(15);
+                        $bill->price = $price_service->price;
+                        $user->check_order -= 1;
+                        if(($user->amount - $price_service->price) >= 0){
+                            $bill->save();
+                            $user->save();
+                            return response()->json([
+                                'status' => 'success',
+                                'orderCode' => $bill->order_code,
+                                'message' => 'Order successfully'
+                            ]);
+                        } else {
+                            return response()->json([
+                                'status' => 'fail',
+                                'message' => 'Order failed! Please try again'
+                            ]);
+                        }
+                    }
+                    else
+                    {
                         return response()->json([
-                            'status' => 'success',
-                            'orderCode' => $bill->order_code,
-                            'message' => 'Order successfully'
-                        ]);
-                    } else {
-                        return response()->json([
-                            'status' => 'fail',
-                            'message' => 'Order failed! Please try again'
+                            'status' => 'warning',
+                            'message' => 'Order failed! Your amount is too low! Please try again'
                         ]);
                     }
                 }

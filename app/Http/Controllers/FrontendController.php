@@ -17,7 +17,7 @@ class FrontendController extends Controller
      * The ProductRepository instance.
      *
      * @var \App\Repositories\front\FrontendRepository
-     * 
+     *
      */
     protected $repository;
 
@@ -34,7 +34,7 @@ class FrontendController extends Controller
         $this->repository = $repository;
     }
     public function viewSignIn()
-    {     
+    {
         if(Auth::check()){
             if(Auth::user()->role == 1){
                 return redirect()->route('admin');
@@ -43,11 +43,11 @@ class FrontendController extends Controller
             }
         }else{
             return view('layout_index.signin');
-        }    
+        }
     }
 
     public function postSignIn(LoginRequest $request)
-    {  
+    {
         $remember = false;
         if(isset($request->rememberMe)){
             $remember = true;
@@ -80,7 +80,7 @@ class FrontendController extends Controller
                     return redirect()->route('admin')->with('message', '1');
                 }else{
                     return redirect()->route('signin')->with('message', '1');
-                }            
+                }
             } else {
                 return redirect()->back();
             }
@@ -91,7 +91,7 @@ class FrontendController extends Controller
     {
         Auth::logout();
         $rememberMeCookie = Auth::getRecallerName();
-        
+
         $cookie = Cookie::forget($rememberMeCookie);
 
         return Redirect::to('/')->withCookie($cookie);
