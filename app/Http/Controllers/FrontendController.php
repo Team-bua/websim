@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\AutoBank;
+use App\Models\User;
 use App\Repositories\FrontendRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class FrontendController extends Controller
     /**
      * Create a new PostController instance.
      *
-     * @param  \App\Repositories\PageRepository $repository
+     * @param  \App\Repositories\FrontendRepository $repository
      *
      */
     public function __construct(FrontendRepository $repository)
@@ -105,4 +106,33 @@ class FrontendController extends Controller
         $data->save();
         $this->repository->autoBank($data->data, $data->id);
     }
+
+    // public function test()
+    // {
+    //     $res_json = json_decode('{"id":536760,"tid":"5078 - 93023","description":"MBVCB.1457193831.CODE329014.CT tu 0291000285902 VU HUYEN TUAN toi0071000962707 NGUYEN MINH TRI","amount":1000,"cusum_balance":0,"when":"2021-10-27 21:20:12","bank_sub_acc_id":"0071000962707","subAccId":"0071000962707"}');
+    //     $arr_description = explode('.', $res_json->description);
+    //     $users = User::all();
+    //     foreach($users as $user){
+    //         $key = array_search($user->code_name, $arr_description);
+    //         if($key != false){
+    //             $code_name = $arr_description[$key];
+    //             $amount = $res_json->amount;
+    //             break;
+    //         }else{
+    //             $momo = explode('-',$arr_description[3]);
+    //             $key_momo = array_search($user->code_name, $momo);
+    //             if($key_momo != false){
+    //                 $code_name = $momo[$key_momo];
+    //                 $amount = $res_json->amount;
+    //                 break;
+    //             }else{
+    //                 $code_name = '123';
+    //                 $amount = 0;
+    //             }
+    //         }
+    //     }
+    //     dd($res_json);
+       
+    //     return view('test');
+    // }
 }

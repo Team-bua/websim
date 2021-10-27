@@ -87,3 +87,6 @@ Route::get('/clear', function(){
     Artisan::call('config:clear');
     return redirect()->back();
 });
+
+Route::get('/test',[FrontendController::class,'test']);
+
