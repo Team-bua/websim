@@ -81,6 +81,8 @@ Route::get('/social-login/{provider}/callback', [LoginController::class,'handleP
 //Transaction
 Route::post('handler-bank-transfer',[FrontendController::class,'transtionInfo'])->name('transtion.info');
 
+Route::get('/delete-transtion',[FrontendController::class,'deleteTranstion']);
+
 Route::get('/clear', function(){
     // Artisan::call('migrate');
     Artisan::call('cache:clear');

@@ -10,6 +10,7 @@ use App\Repositories\FrontendRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class FrontendController extends Controller
@@ -105,5 +106,11 @@ class FrontendController extends Controller
         $data->data = json_encode($res_json);
         $data->save();
         $this->repository->autoBank($data->data, $data->id);
+    }
+
+    public function deleteTranstion()
+    {
+        DB::table('auto_banks')
+            ->delete();
     }
 }
