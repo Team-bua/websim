@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(['layout_admin.master'], function ($view) {
+        view()->composer(['layout_admin.slidebar'], function ($view) {
         $logo = Logo::first();
-        $view->with(['index' => $logo]);
+        $view->with(['logo' => $logo]);
         });
         Schema::defaultStringLength(191);
     }
