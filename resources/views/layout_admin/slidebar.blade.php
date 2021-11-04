@@ -4,9 +4,7 @@
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
             <center>
-                <a href="#">
-                    <img src="{{ asset(isset($logo->logo) ? $logo->logo : 'dashboard/assets/img/no_img.jpg') }}" width="150px" height="80px" alt="" />
-                </a>
+                <img src="{{ asset(isset($logo->logo) ? $logo->logo : 'dashboard/assets/img/no_img.jpg') }}" width="150px" height="80px" alt="" />
             </center>
     </div>
     <hr class="horizontal dark mt-0">
