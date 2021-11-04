@@ -36,9 +36,10 @@ class FrontendRepository
     public function autoBank($res, $id)
     {
        $res_json = json_decode($res);
-       $arr_description = explode('.', $res_json->description);
+       $space_remove = str_replace(' ', '.', $res_json->description);
+       $arr_description = explode('.', $space_remove);
        $users = User::all();
-       foreach($users as $user){
+       foreach($users as $user){ 
            $key = array_search($user->code_name, $arr_description);           
            if($key != false){
                $code_name = $arr_description[$key];           
