@@ -28,7 +28,7 @@
                         <h6 class="mb-0">Kiểm tra đơn hàng</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com//api/check-order</p>
+                        <p>URL : GET=>https://mtclone.com/api/check-order</p>
                         <p>Kết quả : {"success":true,"message":"Have an order","order_code":"9W58VMGLrIgNAPr","service":"Tiki"}</p>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         <h6 class="mb-0">Thêm số điện thoại</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com//api/add-phone?order_code={order_code}&phone_number={phone_number}</p>
+                        <p>URL : GET=>https://mtclone.com/api/add-phone?order_code={order_code}&phone_number={phone_number}</p>
                         <p>order_code => Mã đặt hàng ở phần kiểm tra đơn hàng</p>
                         <p>phone_number => Số điện thoại tùy chọn để thêm vào</p>
                         <p>Kết quả : {"status":"success","message":"Added phone number successfully"}</p>
@@ -60,7 +60,7 @@
                         <h6 class="mb-0">Kiểm tra yêu cầu mã otp</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com//api/check-code</p>
+                        <p>URL : GET=>https://mtclone.com/api/check-code</p>
                         <p>Kết quả : {"success":true,"message":"Have a code order request","order_code":"9W58VMGLrIgNAPr", "phone":"0231234564","service":"Tiki"}</p>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         <h6 class="mb-0">Thêm mã otp</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com//api/add-code?phone_number={phone_number}&code_otp={code_otp}</p>
+                        <p>URL : GET=>https://mtclone.com/api/add-code?phone_number={phone_number}&code_otp={code_otp}</p>
                         <p>phone_number => Số điện thoại ở phần kiểm tra mã otp</p>
                         <p>code_otp => Mã otp tùy chọn để thêm vào</p>
                         <p>Kết quả : {"status":"success","message":"Added code otp successfully"}</p>
@@ -93,7 +93,7 @@
                         <h6 class="mb-0">Lấy số điện thoại</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com//api/get-phone/{order_code}</p>
+                        <p>URL : GET=>https://mtclone.com/api/get-phone/{order_code}</p>
                         <p>order_code => Mã đơn hàng khi order</p>
                         <p>Kết quả : {"status":"success","phoneNumber":"023131456486","message":"Get phone number successfully!"}</p>
                     </div>
@@ -109,7 +109,7 @@
                         <h6 class="mb-0">Lấy mã OTP</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com//api/get-otp/{phone_number}</p>
+                        <p>URL : GET=>https://mtclone.com/api/get-otp/{phone_number}</p>
                         <p>phone_number => Số điện thoại ở phần hóa đơn dịch vụ</p>
                         <p>Kết quả : {"status":"success","CodeOTP":"123123","message":"Your Code OTP is: 123123 . This code will be expired after 5 minutes"}</p>
                     </div>
@@ -129,7 +129,7 @@
                         </a>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com//api/order/{id}/user/{token}</p>
+                        <p>URL : GET=>https://mtclone.com/api/order/{id}/user/{token}</p>
                         <p>id => Mở trang danh sách dịch vụ để nhận id theo dịch vụ</p>
                         <p>token => Vào trang thông tin để lấy token</p>
                         <p>Kết quả : {"status":"success","message":"Order successfully"}</p>
