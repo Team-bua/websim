@@ -23,6 +23,7 @@ class ApiController extends Controller
     {
         $prices = 0;
         $user = User::where('user_token', $token)->where('banned_status', 0)->first();
+        $service = Services::find($id);
         $user_bill_price = ServiceBill::select('price')->where('status', 0)->where('user_id', $user->id)->get();
         foreach ($user_bill_price as $price){
             $prices += $price->price;
@@ -37,7 +38,7 @@ class ApiController extends Controller
                     'message' => 'Your account has been banned',
                 ]);
             }else{
-                if($id){
+                if($service){
                     $price_service = Services::find($id);
                     $check_amount = $prices + $price_service->price;
                     if($user->amount - $check_amount >= 0){
@@ -69,6 +70,11 @@ class ApiController extends Controller
                             'message' => 'Order failed! Your amount is too low! Please try again'
                         ]);
                     }
+                }else{
+                    return response()->json([
+                        'status' => 'fail',
+                        'message' => 'Order id does not exist'
+                    ]);
                 }
             }
         }else{
