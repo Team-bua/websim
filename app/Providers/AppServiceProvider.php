@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(['layout_admin.slidebar','layout_admin.master'], function ($view) {
+        view()->composer(['layout_admin.slidebar','layout_admin.master','layout_index.signin','layout_index.signup'], function ($view) {
         $logo = Logo::first();
         $view->with(['logo' => $logo]);
         });

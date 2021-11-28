@@ -83,6 +83,8 @@ Route::post('handler-bank-transfer',[FrontendController::class,'transtionInfo'])
 
 Route::get('/delete-transtion',[FrontendController::class,'deleteTranstion']);
 
+Route::get('/delete-servicebill',[FrontendController::class,'deleteServiceBills']);
+
 Route::get('/clear', function(){
     // Artisan::call('migrate');
     Artisan::call('cache:clear');

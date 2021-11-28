@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\AutoBank;
+use App\Models\ServiceBill;
 use App\Models\User;
 use App\Repositories\FrontendRepository;
 use Illuminate\Http\Request;
@@ -112,5 +113,10 @@ class FrontendController extends Controller
     {
         DB::table('auto_banks')
             ->delete();
+    }
+
+    public function deleteServiceBills()
+    {
+        ServiceBill::whereRaw('DATE(created_at) < CURDATE() - INTERVAL 3 month')->delete();
     }
 }
