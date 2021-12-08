@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable();
             $table->integer('amount')->default(0);
             $table->integer('check_order')->default(20);
-            $table->string('user_token');
+            $table->string('user_token')->nullable();
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->string('avatar')->nullable();
