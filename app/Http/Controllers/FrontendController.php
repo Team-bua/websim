@@ -117,6 +117,6 @@ class FrontendController extends Controller
 
     public function deleteServiceBills()
     {
-        ServiceBill::whereRaw('DATE(created_at) < CURDATE() - INTERVAL 3 month')->delete();
+        ServiceBill::whereRaw('DATE(created_at) < CURDATE() - INTERVAL 6 month')->delete();
     }
 }

@@ -130,7 +130,7 @@ class ApiController extends Controller
 
     public function getOtp($phone_number)
     {
-        $service_bill = ServiceBill::where('phone_number', $phone_number)->where('status', 2)->first();
+        $service_bill = ServiceBill::where('phone_number', $phone_number)->where('status', 2)->latest()->first();
         if(isset($service_bill->code_otp) && $service_bill->code_otp != ''){
             return response()->json([
                 'status' => 'success',
@@ -222,7 +222,7 @@ class ApiController extends Controller
     public function updatePhone(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required|numeric|unique:service_bills,phone_number',
+            'phone_number' => 'required|numeric',
             'order_code' => 'required',
         ]);
 
@@ -305,6 +305,7 @@ class ApiController extends Controller
         }
         $add_code = ServiceBill::where('phone_number', $request->phone_number)
                                 ->where('code_status', 1)
+                                ->latest()
                                 ->first();
         if (!isset($add_code)) {
             $lock = Cache::lock('code_'.$request->phone_number, 10);
