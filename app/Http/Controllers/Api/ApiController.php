@@ -128,9 +128,9 @@ class ApiController extends Controller
     }
 
 
-    public function getOtp($phone_number)
+    public function getOtp($phone_number, $order_code)
     {
-        $service_bill = ServiceBill::where('phone_number', $phone_number)->where('status', 2)->latest()->first();
+        $service_bill = ServiceBill::where('phone_number', $phone_number)->where('order_code', $order_code)->where('status', 2)->first();
         if(isset($service_bill->code_otp) && $service_bill->code_otp != ''){
             return response()->json([
                 'status' => 'success',
@@ -297,6 +297,7 @@ class ApiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required',
+            'order_code' => 'required',
             'code_otp' => 'required'
         ]);
 
@@ -304,11 +305,11 @@ class ApiController extends Controller
             return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
         $add_code = ServiceBill::where('phone_number', $request->phone_number)
+                                ->where('order_code', $request->order_code)
                                 ->where('code_status', 1)
-                                ->latest()
                                 ->first();
         if (!isset($add_code)) {
-            $lock = Cache::lock('code_'.$request->phone_number, 10);
+            $lock = Cache::lock('code_'.$request->phone_number.'_'.$request->order_code, 10);
             if ($lock->get()) {
                 return response()->json([
                     'status' => 'fail',

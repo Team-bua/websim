@@ -2,6 +2,11 @@
 @section('title')
 <title>Tài liệu API</title>
 @endsection
+<style>
+    .card-body p{
+        font-size: 15px;
+    }
+</style>
 @section('content')
 <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
     <!-- Navbar -->
@@ -75,8 +80,9 @@
                         <h6 class="mb-0">Thêm mã otp</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com/api/add-code?phone_number={phone_number}&code_otp={code_otp}</p>
-                        <p>phone_number => Số điện thoại ở phần kiểm tra mã otp</p>
+                        <p>URL : GET=>https://mtclone.com/api/add-code?phone_number={phone_number}&order_code={order_code}&code_otp={code_otp}</p>
+                        <p>phone_number => Số điện thoại vừa thêm</p>
+                        <p>order_code => Mã đặt hàng ở phần kiểm tra đơn hàng</p>
                         <p>code_otp => Mã otp tùy chọn để thêm vào</p>
                         <p>Kết quả : {"status":"success","message":"Added code otp successfully"}</p>
                     </div>
@@ -109,7 +115,8 @@
                         <h6 class="mb-0">Lấy mã OTP</h6>
                     </div>
                     <div class="card-body p-3">
-                        <p>URL : GET=>https://mtclone.com/api/get-otp/{phone_number}</p>
+                        <p>URL : GET=>https://mtclone.com/api/get-otp/{order_code}/{phone_number}</p>
+                        <p>order_code =>  Mã đơn hàng khi order</p>
                         <p>phone_number => Số điện thoại ở phần hóa đơn dịch vụ</p>
                         <p>Kết quả : {"status":"success","CodeOTP":"123123","message":"Your Code OTP is: 123123 . This code will be expired after 5 minutes"}</p>
                     </div>
