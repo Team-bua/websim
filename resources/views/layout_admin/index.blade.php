@@ -16,7 +16,7 @@
                 </ol>
                 <h6 class="font-weight-bolder mb-0">Dashboard</h6>
             </nav>
-        @include('layout_admin.info')        
+        @include('layout_admin.info')
         </div>
     </nav>
     <!-- End Navbar -->
@@ -49,13 +49,13 @@
                     </div>
                     <form action="{{ route('admin.search') }}" id="" enctype="multipart/form-data" method="post">
                         @csrf
-                    <div class="card-body px-0 pt-0 pb-2">                           
-                        <div class="table-responsive p-0">                          
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
                                 <div class="card-header pb-0">
                                     <button type="submit" name="search" class="btn bg-gradient-primary mt-2 " style="float: right;margin-left:5px">
                                         <i class="fa fa-search"></i></button>
                                     <input class="form-control datepicker" name="date" style="width: 25%; float: right; margin-top: 10px" placeholder="Please select date" type="text"
-                                    value="{{ date('d/m/Y', strtotime($first_day)) . ' to ' . date('d/m/Y', strtotime($last_day)) }}" >                       
+                                    value="{{ date('d/m/Y', strtotime($first_day)) . ' to ' . date('d/m/Y', strtotime($last_day)) }}" >
                                 </div>
                             <table class="table table-flush" id="datatable-basic">
                                 <thead class="thead-light">
@@ -74,7 +74,7 @@
                                             <span class="text-secondary text-xs font-weight-bold">{{ number_format($arrRevenueMonthDone[$i]) }} VNĐ </span>
                                         </td>
                                     </tr>
-                                @endfor                                 
+                                @endfor
                                 </tbody>
                             </table>
                         </div>
@@ -93,13 +93,13 @@
       searchable: false,
       fixedHeight: true
     });
-  </script> 
+  </script>
 <script type="text/javascript">
     if (document.querySelector('.datepicker')) {
       flatpickr('.datepicker', {
         mode: "range",
         dateFormat: 'd/m/Y'
-      });       
+      });
     }
   </script>
 @endsection

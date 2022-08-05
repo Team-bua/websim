@@ -43,7 +43,7 @@ class UserController extends Controller
     }
 
     public function recharge()
-    {   
+    {
         $admin = AdminTransaction::find(1);
         $admin_str = $this->repository->utf8convert($admin->bank_name);
         return view('user.recharge', compact('admin','admin_str'));
@@ -55,19 +55,19 @@ class UserController extends Controller
         if($request->date == null)
         {
             $first_day = date('Y-m-d', strtotime($date));
-            $last_day = date('Y-m-d', strtotime($date));            
+            $last_day = date('Y-m-d', strtotime($date));
         }
         else if(isset(explode(' to ', $request->date)[1]) == false)
         {
             $first_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
-            $last_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));  
+            $last_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
         }
         else
         {
             $first_day = date('Y-m-d', strtotime(str_replace('/', '-', explode(' to ', $request->date)[0])));
             $last_day = date('Y-m-d', strtotime(str_replace('/', '-', explode(' to ', $request->date)[1])));
         }
-        
+
         $transactions = $this->repository->getTransactionHistory($request);
         $status = $request->status;
         return view('user.history-transaction', compact('transactions', 'first_day', 'last_day', 'status'));
@@ -79,19 +79,19 @@ class UserController extends Controller
         if($request->date == null)
         {
             $first_day = date('Y-m-d', strtotime($date));
-            $last_day = date('Y-m-d', strtotime($date));            
+            $last_day = date('Y-m-d', strtotime($date));
         }
         else if(isset(explode(' to ', $request->date)[1]) == false)
         {
             $first_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
-            $last_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));  
+            $last_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
         }
         else
         {
             $first_day = date('Y-m-d', strtotime(str_replace('/', '-', explode(' to ', $request->date)[0])));
             $last_day = date('Y-m-d', strtotime(str_replace('/', '-', explode(' to ', $request->date)[1])));
         }
-        
+
         $bills = $this->repository->getServiceBill($request);
         $status = $request->status;
         return view('user.servicehistory', compact('bills', 'first_day', 'last_day', 'status'));
@@ -104,19 +104,19 @@ class UserController extends Controller
         if($request->date == null)
         {
             $first_day = date('Y-m-d', strtotime($date));
-            $last_day = date('Y-m-d', strtotime($date));            
+            $last_day = date('Y-m-d', strtotime($date));
         }
         else if(isset(explode(' to ', $request->date)[1]) == false)
         {
             $first_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
-            $last_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));  
+            $last_day = date('Y-m-d', strtotime(str_replace('/', '-', $request->date)));
         }
         else
         {
             $first_day = date('Y-m-d', strtotime(str_replace('/', '-', explode(' to ', $request->date)[0])));
             $last_day = date('Y-m-d', strtotime(str_replace('/', '-', explode(' to ', $request->date)[1])));
         }
-        
+
         $recharge_bills = $this->repository->getRechargeBill($request);
         return view('user.rechargehistory', compact('recharge_bills', 'first_day', 'last_day'));
     }
